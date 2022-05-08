@@ -1,8 +1,8 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Teacher } from './teacher.enity';
-import { Institute } from "../institutes/institutes.enity";
+import { Teacher } from './teacher.entity';
+import { Institute } from "../institutes/institutes.entity";
 
 @Injectable()
 export class TeacherService {

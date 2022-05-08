@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Subject } from "./subject.enity";
-import { Teacher } from "../teacher/teacher.enity";
+import { Subject } from "./subject.entity";
+import { Teacher } from "../teacher/teacher.entity";
 import { SubjectController } from "./subject.controller";
 import { SubjectService } from "./subject.service";
 

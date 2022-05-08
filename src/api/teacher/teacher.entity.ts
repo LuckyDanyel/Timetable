@@ -6,7 +6,7 @@ import {
     ManyToMany,
     JoinTable,
     } from "typeorm";
-import { Institute } from "../institutes/institutes.enity";
+import { Institute } from "../institutes/institutes.entity";
 
 @Entity()
 export class Teacher {

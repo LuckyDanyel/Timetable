@@ -1,8 +1,8 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Student } from './student.enity';
-import { Group } from "../group/group.enity";
+import { Student } from './student.entity';
+import { Group } from "../group/group.entity";
 
 @Injectable()
 export class StudentService {

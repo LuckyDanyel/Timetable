@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { Institute } from "./institutes.enity";
+import { Institute } from "./institutes.entity";
 import { InstitutesController } from "./institutes.controller";
 import { InstituteService } from "./istitutes.service";
 import { TypeOrmModule } from "@nestjs/typeorm";

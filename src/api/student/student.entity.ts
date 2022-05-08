@@ -4,7 +4,7 @@ import {
     PrimaryGeneratedColumn,
     ManyToOne,
     } from "typeorm";
-import { Group } from "../group/group.enity";
+import { Group } from "../group/group.entity";
 
 @Entity()
 export class Student {

@@ -5,8 +5,8 @@ import {
     OneToMany,
  } from "typeorm";
 
- import { Direction } from "../direction/direction.enity";
- import { Teacher } from "../teacher/teacher.enity";
+ import { Direction } from "../direction/direction.entity";
+ import { Teacher } from "../teacher/teacher.entity";
 
 @Entity()
 export class Institute {

@@ -14,7 +14,7 @@ import {
 } from "@nestjs/common";
 import { Express } from 'express';
 import { FileInterceptor } from "@nestjs/platform-express";
-import { Institute } from "./institutes.enity";
+import { Institute } from "./institutes.entity";
 import { InstituteService }  from './istitutes.service';
 import excelConverter from "../../converters/excelConverter";
 

@@ -18,7 +18,7 @@ export class SubjectController {
     async uploadfile(@UploadedFile() file: any): Promise<string> {
         try {
           const groupSubject = await excelConverter(file);
-          await this.subjectService.createSubject(groupSubject);
+          await this.subjectService.createSubjects(groupSubject);
           return 'Save';
         } catch (error) {
           return error;

@@ -5,8 +5,8 @@ import {
     ManyToOne,
     OneToMany,
     } from "typeorm";
-import { Institute } from "../institutes/institutes.enity";
-import { Group } from "../group/group.enity";
+import { Institute } from "../institutes/institutes.entity";
+import { Group } from "../group/group.entity";
 
 @Entity()
 export class Direction {

@@ -6,7 +6,7 @@ import {
     ManyToMany,
     JoinTable,
     } from "typeorm";
-import { Teacher } from "../teacher/teacher.enity";
+import { Teacher } from "../teacher/teacher.entity";
 
 @Entity()
 export class Subject {

@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Institute } from './institutes.enity';
+import { Institute } from './institutes.entity';
 
 @Injectable()
 export class InstituteService {

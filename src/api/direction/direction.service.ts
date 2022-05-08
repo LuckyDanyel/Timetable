@@ -1,8 +1,8 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Direction } from './direction.enity';
-import { Institute } from "../institutes/institutes.enity";
+import { Direction } from './direction.entity';
+import { Institute } from "../institutes/institutes.entity";
 
 @Injectable()
 export class DirectionService {

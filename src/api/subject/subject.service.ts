@@ -1,8 +1,8 @@
-import { HttpStatus, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Subject } from './subject.enity';
-import { Teacher } from "../teacher/teacher.enity";
+import { Subject } from './subject.entity';
+import { Teacher } from "../teacher/teacher.entity";
 import { TeacherDto } from "../teacher/dto/teacher.dto";
 
 @Injectable()
@@ -13,19 +13,19 @@ export class SubjectService {
         @InjectRepository(Teacher) private teacherRepository: Repository<Teacher>
     ){}
     
-    async createSubject(groupRows: any): Promise<void> {
-            const groupTeachersOnSubject = await this.groupTeachersOnSubject(groupRows);
-            for(let group in groupTeachersOnSubject) {
-                const subject = this.setFieldSubject(group);
-                const saveSubject = await this.isSubjectInTable(subject);
-                const subjectWithTeacher = this.setFieldSubjectTeacher(groupTeachersOnSubject[group], group);
-                if(saveSubject) {
-                    saveSubject.teacher = [...subjectWithTeacher.teacher];
-                    await this.subjectRepository.save(saveSubject);
-                } else {
-                    await this.subjectRepository.save(subjectWithTeacher);
-                }
+    async createSubjects(groupRows: any): Promise<void> {
+        const groupTeachersOnSubject = await this.groupTeachersOnSubject(groupRows);
+        for(let group in groupTeachersOnSubject) {
+            const subject = this.setFieldSubject(group);
+            const saveSubject = await this.isSubjectInTable(subject);
+            const subjectWithTeacher = this.setFieldSubjectTeacher(groupTeachersOnSubject[group], group);
+            if(saveSubject) {
+                saveSubject.teacher = [...subjectWithTeacher.teacher];
+                await this.subjectRepository.save(saveSubject);
+            } else {
+                await this.subjectRepository.save(subjectWithTeacher);
             }
+        }
     }
 
     async groupTeachersOnSubject(groupRows: any) {
