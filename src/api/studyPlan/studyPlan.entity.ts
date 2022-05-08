@@ -2,11 +2,15 @@ import {
     Column, 
     Entity, 
     PrimaryGeneratedColumn,
-    ManyToOne,
     ManyToMany,
     JoinTable,
+    OneToOne,
+    JoinColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
     } from "typeorm";
 import { Subject } from "../subject/subject.entity";
+import { Direction } from "../direction/direction.entity";
 
 @Entity()
 export class StudyPlan {
@@ -14,9 +18,16 @@ export class StudyPlan {
     id: number;
 
     @Column()
-    nameSubject: string;
+    start_semester: Date;
+        
+    @Column()
+    end_semester: Date;
 
     @ManyToMany(() => Subject)
     @JoinTable()
     subjects: Subject[]
+
+    @OneToOne(() => Direction)
+    @JoinColumn()
+    direction: Direction;
 }
