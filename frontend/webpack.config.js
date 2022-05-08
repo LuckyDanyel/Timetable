@@ -105,8 +105,7 @@ module.exports = {
     },
         
     },
-    
-           
+              
             {
                 test: /\.s[ac]ss$/,
                 use: [MiniCssExtractPlugin.loader, 
@@ -126,10 +125,7 @@ module.exports = {
                     filename: 'fonts/[name][ext][query]',
                     publicPath: '../'
                     
-                },
-              
-                
-                
+                },   
             },
             {
                 test: /\.(gif|png|jpe?g|)$/i,
