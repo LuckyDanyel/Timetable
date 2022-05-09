@@ -2,6 +2,7 @@ const ExcelJS = require('exceljs');
 
 export default async function(excelFile: any): Promise<any>  {
     const buffer = excelFile.buffer;
+    console.log(buffer);
     const workBook = new ExcelJS.Workbook();
     const dataExcel = await workBook.xlsx.load(buffer);
     const groupRows = deleteEmptyItemsAndGroupRows(dataExcel);
@@ -15,6 +16,7 @@ function deleteEmptyItemsAndGroupRows(readBufferInstitute: any): any {
     readBufferInstitute.eachSheet((sheet: any) => {
         sheet.eachRow((row: any) => {
             institute[numberStroke] = [];
+            console.log(row.values);
             row.values.forEach((valueFeild: string) => {
                 if(valueFeild) {
                     valueFeild = deleteSpace(valueFeild);
@@ -24,6 +26,7 @@ function deleteEmptyItemsAndGroupRows(readBufferInstitute: any): any {
             numberStroke++;
         })
     })
+    console.log(institute);
     return institute;
 }
 
