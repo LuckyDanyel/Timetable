@@ -3,86 +3,69 @@ import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Subject } from './subject.entity';
 import { Teacher } from "../teacher/teacher.entity";
-import { TeacherDto } from "../teacher/dto/teacher.dto";
+import { Institute } from "../institutes/institutes.entity";
 
 @Injectable()
 export class SubjectService {
 
     constructor(
         @InjectRepository(Subject) private subjectRepository: Repository<Subject>,
-        @InjectRepository(Teacher) private teacherRepository: Repository<Teacher>
+        @InjectRepository(Teacher) private teacherRepository: Repository<Teacher>,
+        @InjectRepository(Institute) private instituteRepository: Repository<Institute>,
     ){}
     
     async createSubjects(groupRows: any): Promise<void> {
-        const groupTeachersOnSubject = await this.groupTeachersOnSubject(groupRows);
-        for(let group in groupTeachersOnSubject) {
-            const subject = this.setFieldSubject(group);
-            const saveSubject = await this.isSubjectInTable(subject);
-            const subjectWithTeacher = this.setFieldSubjectTeacher(groupTeachersOnSubject[group], group);
-            if(saveSubject) {
-                saveSubject.teacher = [...subjectWithTeacher.teacher];
-                await this.subjectRepository.save(saveSubject);
-            } else {
-                await this.subjectRepository.save(subjectWithTeacher);
-            }
+        for(let subjectStroke in groupRows) {
+            const dataTeacher = groupRows[subjectStroke][1];
+            const dataInstitute = groupRows[subjectStroke][2];
+            const massiveTeacher = await this.getMassiveTeachers(dataTeacher);
+            const massiveInstitute = await this.getMassiveInstitute(dataInstitute);
+            
+            const nameSubject = groupRows[subjectStroke][0];
+            const subject = new Subject();
+            subject.nameSubject = nameSubject;
+            subject.teacher = [...massiveTeacher];
+            subject.institutes = [...massiveInstitute];
+            await this.subjectRepository.save(subject);
         }
     }
 
-    async groupTeachersOnSubject(groupRows: any) {
-        const groupTeachersOnSubject = {};
-        for(let numberStroke in groupRows) {
-            const nameSubject = groupRows[numberStroke][4];
-            const collectDataTeacher = this.collectDataTeacher(groupRows[numberStroke]);
-            const teacher = await this.getTeacher(collectDataTeacher);
-
-            if(!groupTeachersOnSubject[nameSubject]) {
-                groupTeachersOnSubject[nameSubject] = [];
-            }
-            groupTeachersOnSubject[nameSubject].push(teacher);
+    async getMassiveTeachers(dataTeacher: string): Promise<Teacher[]> {
+        const result: Teacher[] = [];
+        const masiveIdTeachers = dataTeacher.split(',');
+        for(let teacherCertificateId of masiveIdTeachers) {
+            const savedTeacher = await this.getTeacher(teacherCertificateId);
+            result.push(savedTeacher);
         }
-    
-        return groupTeachersOnSubject;
+
+        return result;
     }
 
-    collectDataTeacher(data: any): TeacherDto {
-        const name = data[0];
-        const surname = data[1];
-        const patronymic = data[2];
-        const numberСertificateTeacher = data[3];
-
-        return new TeacherDto(
-            name,
-            surname,
-            patronymic,
-            numberСertificateTeacher
-        )
-    }
-
-    async getTeacher(dataTeacher: TeacherDto): Promise<Teacher> {
-        const teacher = await this.teacherRepository.findOne(dataTeacher)
+    async getTeacher(dataTeacher: string): Promise<Teacher> {
+        const teacherCertificateId = Number(dataTeacher);
+        const teacher = await this.teacherRepository.findOne({ numberСertificateTeacher: teacherCertificateId })
         if(!teacher) throw `This teacher ${JSON.stringify(dataTeacher)} is not found`
 
         return teacher;
          
     }
 
-    setFieldSubjectTeacher(massiveTeachers: any, nameSubject: string): Subject {
-        const subject = new Subject();
-        subject.nameSubject = nameSubject;
-        subject.teacher = [...massiveTeachers];
-        return subject;
+    async getMassiveInstitute(dataInstitute: string): Promise<Institute[]> {
+        const result: Institute[] = [];
+        const masiveNameInstitues = dataInstitute.split(',');
+        for(let nameInstitute of masiveNameInstitues) {
+            const savedInstitue = await this.getInstitute(nameInstitute);
+            result.push(savedInstitue);
+        }
+
+        return result;
     }
 
-    setFieldSubject(nameSubject: string) {
-        const subject = new Subject();
-        subject.nameSubject = nameSubject;
-        return subject;
+    async getInstitute(nameInstitute: string): Promise<Institute> {
+        const institute = await this.instituteRepository.findOne({ nameInstitute: nameInstitute });
+        if(!institute) throw `This institute ${nameInstitute} is not found`;
+
+        return institute;
     }
 
-    async isSubjectInTable(subject: Subject) {
-        const isSubjectInTable = await this.subjectRepository.findOne({
-            nameSubject: subject.nameSubject,
-        });
-        return isSubjectInTable;
-    }
 }

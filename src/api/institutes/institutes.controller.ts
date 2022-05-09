@@ -31,7 +31,7 @@ export class InstitutesController {
           await this.instituteService.createInstitutes(groupIstitute);
           return 'Save';
         } catch (error) {
-          return 'No save';
+          return error;
         }
     }
 }

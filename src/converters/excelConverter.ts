@@ -17,6 +17,7 @@ function deleteEmptyItemsAndGroupRows(readBufferInstitute: any): any {
             institute[numberStroke] = [];
             row.values.forEach((valueFeild: string) => {
                 if(valueFeild) {
+                    valueFeild = deleteSpace(valueFeild);
                     institute[numberStroke].push(valueFeild);
                 }
             });
@@ -25,6 +26,8 @@ function deleteEmptyItemsAndGroupRows(readBufferInstitute: any): any {
     })
     return institute;
 }
+
+const deleteSpace = (str: any) => (typeof(str) === "string") ? str.replace(/\s/g, '') : str; 
 
 function deleteNameFields(groupRows: any) {
     delete groupRows['0'];

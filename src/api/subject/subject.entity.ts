@@ -7,6 +7,7 @@ import {
     JoinTable,
     } from "typeorm";
 import { Teacher } from "../teacher/teacher.entity";
+import { Institute } from "../institutes/institutes.entity";
 
 @Entity()
 export class Subject {
@@ -19,4 +20,8 @@ export class Subject {
     @ManyToMany(() => Teacher)
     @JoinTable()
     teacher: Teacher[]
+
+    @ManyToMany(() => Institute)
+    @JoinTable()
+    institutes: Institute[];
 }
