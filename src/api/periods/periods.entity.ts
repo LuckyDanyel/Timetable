@@ -3,14 +3,19 @@ import {
     Entity, 
     PrimaryGeneratedColumn,
     } from "typeorm";
+    
 @Entity()
-export class Audience {
+export class Periods {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    nameAudince: string;
+    numberPeriod: number;
 
     @Column()
-    nameStructure: string;
+    start_time: string;
+
+    @Column()
+    end_time: string;
+
 }
