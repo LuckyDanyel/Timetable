@@ -6,9 +6,10 @@ import { GetStudyPlanService } from "./services/studyPlan.get.service";
 import { StudyPlan } from "./studyPlan.entity";
 import { Subject } from "../subject/subject.entity";
 import { Direction } from "../direction/direction.entity";
+import { LessonInfo } from "../lessonInfo/lessonInfo.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Subject, StudyPlan, Direction])],
+    imports: [TypeOrmModule.forFeature([Subject, StudyPlan, Direction, LessonInfo])],
     controllers: [StudyPlanController],
     providers: [StudyPlanService, GetStudyPlanService],
 })

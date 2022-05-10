@@ -8,9 +8,10 @@ import { Subject } from "../subject/subject.entity";
 import { Teacher } from "../teacher/teacher.entity";
 import { Periods } from "../periods/periods.entity";
 import { Audience } from "../audience/audience.entity";
+import { LessonInfo } from "../lessonInfo/lessonInfo.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Lesson, Group, Subject, Teacher, Periods, Audience])],
+    imports: [TypeOrmModule.forFeature([Lesson, Group, Subject, Teacher, Periods, Audience, LessonInfo])],
     controllers: [LessonController],
     providers: [LessonCreateService],
 })
