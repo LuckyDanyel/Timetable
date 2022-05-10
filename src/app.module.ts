@@ -11,6 +11,8 @@ import { SubjectModule } from './api/subject/subject.module';
 import { StudyPlanModule } from './api/studyPlan/StudyPlan.module';
 import { PeriodsModule } from './api/periods/audience.module';
 import { AudienceModule } from './api/audience/audience.module';
+import { LessonModule } from './api/lesson/lesson.module';
+import { LessonInfoModule } from './api/lessonInfo/lessonInfo.module';
 
 
 
@@ -28,6 +30,8 @@ import { AudienceModule } from './api/audience/audience.module';
     StudyPlanModule,
     PeriodsModule,
     AudienceModule,
+    LessonModule,
+    LessonInfoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
