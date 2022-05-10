@@ -1,11 +1,12 @@
 import { Module } from "@nestjs/common";
-import { Audience } from "./audience.entity";
+import { TypeOrmModule } from "@nestjs/typeorm";
 import { AudienceController } from "./audience.controller";
 import { AudienceService } from "./audience.service";
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { Audience } from "./audience.entity";
+import { Lesson } from "../lesson/lesson.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Audience])],
+    imports: [TypeOrmModule.forFeature([Audience, Lesson])],
     controllers: [AudienceController],
     providers: [AudienceService],
 })

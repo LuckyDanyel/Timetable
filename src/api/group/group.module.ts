@@ -4,9 +4,10 @@ import { Group } from "./group.entity";
 import { Direction } from "../direction/direction.entity";
 import { GroupController } from "./group.controller";
 import { GroupService } from "./group.service";
+import { Lesson } from "../lesson/lesson.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Direction, Group])],
+    imports: [TypeOrmModule.forFeature([Direction, Group, Lesson])],
     controllers: [GroupController],
     providers: [GroupService],
 })

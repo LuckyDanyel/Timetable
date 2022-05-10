@@ -2,7 +2,9 @@ import {
     Column, 
     Entity, 
     PrimaryGeneratedColumn,
-    } from "typeorm";
+    OneToMany,
+} from "typeorm";
+import { Lesson } from "../lesson/lesson.entity";
     
 @Entity()
 export class Periods {
@@ -17,5 +19,8 @@ export class Periods {
 
     @Column()
     end_time: string;
+
+    @OneToMany(() => Lesson, (lesson) => lesson.periods)
+    lessons: Lesson[]
 
 }

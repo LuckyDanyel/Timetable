@@ -47,7 +47,6 @@ export class StudyPlanService {
         .leftJoinAndSelect('study_plan.direction', "direction")
         .where("study_plan.direction.id = :directionId", { directionId: direction.id })
         .getOne();
-        console.log(directionInplan);
         if(directionInplan) throw `this direction ${JSON.stringify(direction)} has study plan`
         return directionInplan;
     }

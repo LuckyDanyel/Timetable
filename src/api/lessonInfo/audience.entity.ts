@@ -2,7 +2,10 @@ import {
     Column, 
     Entity, 
     PrimaryGeneratedColumn,
-    } from "typeorm";
+    OneToMany,
+} from "typeorm";
+import { Lesson } from "../lesson/lesson.entity";
+
 @Entity()
 export class Audience {
     @PrimaryGeneratedColumn()
@@ -13,4 +16,8 @@ export class Audience {
 
     @Column()
     nameStructure: string;
+
+    @OneToMany(() => Lesson, (lesson) => lesson.audience)
+    lessons: Lesson[]
+
 }

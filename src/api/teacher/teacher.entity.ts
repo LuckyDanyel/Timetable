@@ -5,8 +5,10 @@ import {
     ManyToOne,
     ManyToMany,
     JoinTable,
+    OneToMany,
     } from "typeorm";
 import { Institute } from "../institutes/institutes.entity";
+import { Lesson } from "../lesson/lesson.entity";
 
 @Entity()
 export class Teacher {
@@ -30,5 +32,8 @@ export class Teacher {
 
     @ManyToOne(() => Institute, (institute) => institute.teacher,  { cascade: true })
     institute: Institute;
+
+    @OneToMany(() => Lesson, (lesson) => lesson.teacher)
+    lessons: Lesson[]
 
 }

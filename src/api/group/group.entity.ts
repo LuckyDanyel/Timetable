@@ -7,6 +7,7 @@ import {
     } from "typeorm";
 import { Direction } from "../direction/direction.entity";
 import { Student } from "../student/student.entity";
+import { Lesson } from "../lesson/lesson.entity";
 
 @Entity()
 export class Group {
@@ -24,4 +25,7 @@ export class Group {
 
     @OneToMany(() => Student, (student) => student.group)
     students: Student[];
+
+    @OneToMany(() => Lesson, (lesson) => lesson.group)
+    lessons: Lesson[]
 }

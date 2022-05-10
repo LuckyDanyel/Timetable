@@ -5,9 +5,11 @@ import {
     ManyToOne,
     ManyToMany,
     JoinTable,
+    OneToMany,
     } from "typeorm";
 import { Teacher } from "../teacher/teacher.entity";
 import { Institute } from "../institutes/institutes.entity";
+import { Lesson } from "../lesson/lesson.entity";
 
 @Entity()
 export class Subject {
@@ -24,4 +26,7 @@ export class Subject {
     @ManyToMany(() => Institute)
     @JoinTable()
     institutes: Institute[];
+
+    @OneToMany(() => Lesson, (lesson) => lesson.subject)
+    lessons: Lesson[];
 }
