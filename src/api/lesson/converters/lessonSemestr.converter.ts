@@ -4,24 +4,22 @@ import { Lesson } from '../lesson.entity';
 const massiveDays = ["ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"]
 
 class WeekLessons {
-    startWeek: string;
+    startWeek: Date;
     endWeek: Date;
-    massive: Lesson[];
 }
 
-class MonthSemesterLessons {
-    idMonth: number;
-    nameMonth: string;
-    startMonth: Date;
-    massiveWeeks: WeekLessons[];
-}
-
-export function lessonConverterSemestr(massiveLessons: any): any {
-    const { start_semester, end_semester} = massiveLessons[0].lessonInfo.studyPlan;
+export function lessonConverterSemestr(dataLessons: any): any {
+    const { studyPlan } = dataLessons;
+    const { start_semester, end_semester } =  studyPlan;
+    const { massiveLessonGroup: massiveLessons } = dataLessons;
     const configureDate = createConfigureWeeks(start_semester, end_semester);
     const weekStructure = createStructureWeeksLessons(configureDate);
-    const weekLessonsStructure = addLessonsToWeeks(weekStructure, configureDate);
     const groupWeeks = groupWeeksOnMonth(weekStructure, configureDate);
+    const monthWeeksLessons = addLessonsToWeeks(groupWeeks, massiveLessons, configureDate);
+    return {
+        studyPlan,
+        monthWeeksLessons,
+    } 
     
 }
 
@@ -37,7 +35,6 @@ function createConfigureWeeks(start_semester: Date, end_semester: Date) {
     const mouthNumber = start_semester.getMonth();
     const year = start_semester.getFullYear();
     const day = start_semester.getDate();
-    console.log(day);
 
     return {
         countMonth,
@@ -50,7 +47,6 @@ function createConfigureWeeks(start_semester: Date, end_semester: Date) {
 function createStructureWeeksLessons(dataConfigure: any): WeekLessons[] {
     const { year, mouthNumber, countMonth, day } = dataConfigure;
     const startDate = new Date(year, mouthNumber, day);
-    console.log(startDate.toLocaleString())
     const newDateStart = findDayMonday(startDate);
 
     let countDateWeek = 0;
@@ -61,7 +57,7 @@ function createStructureWeeksLessons(dataConfigure: any): WeekLessons[] {
 
         const dateWeekStart = new Date(dateMonth);
         dateWeekStart.setDate(dateMonth.getDate() + countDateWeek);
-        week.startWeek = dateWeekStart.toLocaleString();
+        week.startWeek = dateWeekStart;
 
         const dateWeekEnd = new Date(dateMonth);
         countDateWeek = countDateWeek + 7; 
@@ -74,26 +70,46 @@ function createStructureWeeksLessons(dataConfigure: any): WeekLessons[] {
     return result;
 }
 
-function groupWeeksOnMonth(dataWeeks: WeekLessons[], configureDate: any) {
-    const { year, mouthNumber, countMonth } = configureDate;
-    const startDate = new Date(year, mouthNumber, 0);
-
-    for(let week of dataWeeks) {
-
-    }
-}
-
-function addLessonsToWeeks(dataWeeks: WeekLessons[], dateConfigure: any): WeekLessons[] {
+function groupWeeksOnMonth(dataWeeks: WeekLessons[], dateConfigure: any): any {
     const { year, mouthNumber, countMonth } = dateConfigure;
     const groupData = {};
     for(let week of dataWeeks) {
-        const monthIndexEnd = week.endWeek.getUTCMonth();
+        const monthIndexEnd = week.endWeek.getMonth();
         if(!groupData[monthIndexEnd]) {
             groupData[monthIndexEnd] = []
         }
             groupData[monthIndexEnd].push(week);
     }
-    return;
+    return groupData;
+}
+function addLessonsToWeeks(DataWeeksOnMonth: WeekLessons[], lessonData: Lesson[], configureDate: any) {
+    const { year, mouthNumber, countMonth } = configureDate;
+
+    for(let lesson of lessonData) {
+        const date = new Date(lesson.date);
+        const dayIndexDateLesson = date.getDay();
+        const monthDateLesson = date.getMonth();
+        const monthForLessonInData = DataWeeksOnMonth[monthDateLesson];
+        // console.log("Предмет - " , date.toLocaleString())
+        for(let weekLesson in monthForLessonInData) {
+            const startDayWeek = monthForLessonInData[weekLesson].startWeek;
+            const endDayWeek = monthForLessonInData[weekLesson].endWeek;
+            const currentWeek = monthForLessonInData[weekLesson];
+            // console.log("Старт - ", monthForLessonInData[weekLesson].startWeek.toLocaleString());
+            // console.log("Конец - ", monthForLessonInData[weekLesson].endWeek.toLocaleString());
+            if(+startDayWeek <= +date && +date <= +endDayWeek) {
+                const nameDay = massiveDays[dayIndexDateLesson];
+                if(!currentWeek.massiveLessonsOnWeek) {
+                    currentWeek.massiveLessonsOnWeek = {};
+                }
+                if(!currentWeek.massiveLessonsOnWeek[nameDay]) {
+                    currentWeek.massiveLessonsOnWeek[nameDay] = [];
+                }
+                currentWeek.massiveLessonsOnWeek[nameDay].push(lesson);
+            }
+        } 
+    }
+    return DataWeeksOnMonth;
 }
 
 function findDayMonday(date: Date) {
@@ -101,7 +117,6 @@ function findDayMonday(date: Date) {
     while(newDate.getDay() !== 1) {
         newDate.setDate(newDate.getDate() - 1);
     }
-    console.log(newDate.toLocaleString());
 
     return newDate;
 }
