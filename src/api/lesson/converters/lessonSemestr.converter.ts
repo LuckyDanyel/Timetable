@@ -9,7 +9,8 @@ class WeekLessons {
 }
 
 export function lessonConverterSemestr(dataLessons: any): any {
-    const { studyPlan } = dataLessons;
+    const { lessonInfo } = dataLessons;
+    const { studyPlan } = lessonInfo;
     const { start_semester, end_semester } =  studyPlan;
     const { massiveLessonGroup: massiveLessons } = dataLessons;
     const configureDate = createConfigureWeeks(start_semester, end_semester);
@@ -17,7 +18,7 @@ export function lessonConverterSemestr(dataLessons: any): any {
     const groupWeeks = groupWeeksOnMonth(weekStructure, configureDate);
     const monthWeeksLessons = addLessonsToWeeks(groupWeeks, massiveLessons, configureDate);
     return {
-        studyPlan,
+        lessonInfo,
         monthWeeksLessons,
     } 
     

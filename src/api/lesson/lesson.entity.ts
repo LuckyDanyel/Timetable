@@ -4,7 +4,6 @@ import {
     ManyToOne, 
     PrimaryGeneratedColumn,
 } from "typeorm";
-import { Group } from "../group/group.entity";
 import { Subject } from "../subject/subject.entity";
 import { Teacher } from "../teacher/teacher.entity";
 import { Periods } from "../periods/periods.entity";
@@ -18,9 +17,6 @@ export class Lesson {
 
     @Column()
     date: Date;
-
-    @ManyToOne(() => Group, (group) => group.lessons)
-    group: Group;
 
     @ManyToOne(() => Subject, (subject) => subject.lessons)
     subject: Subject;
