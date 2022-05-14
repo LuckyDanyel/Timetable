@@ -7,6 +7,7 @@ import {
     OneToOne,
     JoinColumn,
     OneToMany,
+    ManyToOne,
     } from "typeorm";
 import { Subject } from "../subject/subject.entity";
 import { Direction } from "../direction/direction.entity";
@@ -23,12 +24,14 @@ export class StudyPlan {
     @Column()
     end_semester: Date;
 
+    @Column()
+    course: number;
+
     @ManyToMany(() => Subject)
     @JoinTable()
     subjects: Subject[]
 
-    @OneToOne(() => Direction)
-    @JoinColumn()
+    @ManyToOne(() => Direction, (dircetion) => dircetion.studyPlans)
     direction: Direction;
 
     @OneToMany(() => LessonInfo, (lessonInfo) => lessonInfo.studyPlan)

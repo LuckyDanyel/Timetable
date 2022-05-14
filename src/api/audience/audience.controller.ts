@@ -1,5 +1,7 @@
 import { 
   Controller, 
+  Get, 
+  Param, 
   Post,
   UploadedFile,
   UseInterceptors, 
@@ -19,6 +21,16 @@ export class AudienceController {
         try {
             const dataAudince = await excelConverter(excelFile);
             await this.audienceService.createAudience(dataAudince);
+        } catch (error) {
+            
+        }
+    }
+
+    @Get(":date/:idPeriods/:idTypeLesson/:idInstiute")
+    async getFreeAudience(@Param() params: any): Promise<string> {
+        try {
+            console.log(params);
+            return;
         } catch (error) {
             
         }

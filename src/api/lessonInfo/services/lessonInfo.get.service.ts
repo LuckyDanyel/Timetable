@@ -46,5 +46,18 @@ export class LessonInfoGetService {
     
         return dataGroupOnLesonInfo;
     }
+
+    async getSubjectsStudyPlanByLessonid(lessonInfoId: number) {
+        const lessonInfo: LessonInfo = await 
+        this.lessonInfoRepository.createQueryBuilder("lesson_info")
+        .leftJoinAndMapOne("lesson_info.studyPlan", "lesson_info.studyPlan", "study_plan")
+        .leftJoinAndMapMany("study_plan.subjects", "study_plan.subjects", "subjects")
+        .where("lesson_info.id = :idLessonInfo", { idLessonInfo: lessonInfoId })
+        .getOne();
+
+        const { subjects }: StudyPlan = lessonInfo.studyPlan;
+
+        return subjects;
+    }
     
 }

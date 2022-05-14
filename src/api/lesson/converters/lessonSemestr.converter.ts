@@ -10,15 +10,29 @@ class WeekLessons {
 
 export function lessonConverterSemestr(dataLessons: any): any {
     const { lessonInfo } = dataLessons;
-    const { studyPlan } = lessonInfo;
-    const { start_semester, end_semester } =  studyPlan;
+    const { id: idLessonInfo, group, studyPlan } = lessonInfo;
+    const { direction, id: idStudyPlan, course, start_semester, end_semester } =  studyPlan;
+    const { id: idDirection, nameDirection, codeDirection, institute } = direction;
     const { massiveLessonGroup: massiveLessons } = dataLessons;
     const configureDate = createConfigureWeeks(start_semester, end_semester);
     const weekStructure = createStructureWeeksLessons(configureDate);
     const groupWeeks = groupWeeksOnMonth(weekStructure, configureDate);
     const monthWeeksLessons = addLessonsToWeeks(groupWeeks, massiveLessons, configureDate);
     return {
-        lessonInfo,
+        idLessonInfo,
+        studyPlan: {
+            idStudyPlan,
+            course,
+            start_semester,
+            end_semester,
+        },
+        institute,
+        direction: {
+            idDirection,
+            nameDirection,
+            codeDirection,
+        },
+        group,
         monthWeeksLessons,
     } 
     

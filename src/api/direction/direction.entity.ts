@@ -7,6 +7,7 @@ import {
     } from "typeorm";
 import { Institute } from "../institutes/institutes.entity";
 import { Group } from "../group/group.entity";
+import { StudyPlan } from "../studyPlan/studyPlan.entity";
 
 @Entity()
 export class Direction {
@@ -18,6 +19,9 @@ export class Direction {
 
     @Column()
     codeDirection: string;
+
+    @OneToMany(() => StudyPlan, (studyPlan) => studyPlan.direction)
+    studyPlans: StudyPlan[];
 
     @ManyToOne(() => Institute, (institute) => institute.directions)
     institute: Institute;

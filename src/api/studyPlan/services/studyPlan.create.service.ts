@@ -16,7 +16,7 @@ export class StudyPlanService {
     ){}
     
     async createStudyPlan(dataStudyPlan: CreateStudyPlanDto): Promise<void> {
-        const { dataDirections, dataSubjects, data_start, data_end } = dataStudyPlan;
+        const { dataDirections, dataSubjects, data_start, data_end, course } = dataStudyPlan;
         const massiveSubjects: Subject[] = [];
         const studyPlan = new StudyPlan();
         const direction = new Direction();
@@ -35,19 +35,21 @@ export class StudyPlanService {
         studyPlan.start_semester = data_start;
         studyPlan.end_semester = data_end;
         studyPlan.direction = direction;
+        studyPlan.course = course;
         studyPlan.subjects = [...massiveSubjects];
 
-        await this.isDirectionHasPlan(direction);
+        await this.isDirectionHasPlan(direction, course);
         await this.studyPlanRepository.save(studyPlan);
     }
 
-    async isDirectionHasPlan(direction: Direction): Promise<StudyPlan> {
+    async isDirectionHasPlan(direction: Direction, numberCourse: number): Promise<StudyPlan> {
         const directionInplan = await getManager().getRepository(StudyPlan)
         .createQueryBuilder("study_plan")
         .leftJoinAndSelect('study_plan.direction', "direction")
         .where("study_plan.direction.id = :directionId", { directionId: direction.id })
+        .andWhere("study_plan.course = :numberCourse", { numberCourse })
         .getOne();
-        if(directionInplan) throw `this direction ${JSON.stringify(direction)} has study plan`
+        if(directionInplan) throw `this direction ${JSON.stringify(direction)} with numberCourse - ${numberCourse} has study plan`
         return directionInplan;
     }
 }

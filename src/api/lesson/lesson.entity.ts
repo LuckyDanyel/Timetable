@@ -9,6 +9,7 @@ import { Teacher } from "../teacher/teacher.entity";
 import { Periods } from "../periods/periods.entity";
 import { Audience } from "../audience/audience.entity";
 import { LessonInfo } from "../lessonInfo/lessonInfo.entity";
+import { TypeLesson } from "../typeLesson/typeLesson.entity";
 
 @Entity()
 export class Lesson {
@@ -32,5 +33,8 @@ export class Lesson {
 
     @ManyToOne(() => LessonInfo, (lessonInfo) => lessonInfo.lessons)
     lessonInfo: LessonInfo
+
+    @ManyToOne(() => TypeLesson, (typeLesson) => typeLesson.lessons)
+    typeLesson: TypeLesson;
 
 }

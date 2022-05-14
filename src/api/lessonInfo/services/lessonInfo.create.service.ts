@@ -14,10 +14,9 @@ export class LessonInfoCreateService {
     ){}
     
     async createLessonInfo(dataLessons: any): Promise<void> {
-        const { direction } = dataLessons.dataGroup;
         const { dataGroup } = dataLessons;
 
-        const studyPlan = await this.getStudyPlanOnDirection(direction);
+        const studyPlan = await this.getStudyPlanOnDirectionAndCourse(dataLessons.dataGroup);
         await this.IsGroupHasLessonInfo(dataGroup);
 
         const lessonInfo = new LessonInfo();
@@ -37,15 +36,17 @@ export class LessonInfoCreateService {
         return groupInLessonInfo;
     }
 
-    async getStudyPlanOnDirection(direction: Direction): Promise<StudyPlan> {
-        const directionInplan = await getManager().getRepository(StudyPlan)
+    async getStudyPlanOnDirectionAndCourse(dataGroup: Group): Promise<StudyPlan> {
+        const { direction, course } = dataGroup;
+        const directionCourseInPlan = await getManager().getRepository(StudyPlan)
         .createQueryBuilder("study_plan")
         .leftJoinAndSelect('study_plan.direction', "direction")
         .where("study_plan.direction.id = :directionId", { directionId: direction.id })
+        .andWhere("study_plan.course = :courseNumber", { courseNumber: course })
         .getOne();
-        console.log(!directionInplan);
-        if(!directionInplan) throw `This direction ${JSON.stringify(direction)} doesn't in studyPlan`
-        return directionInplan;
+        console.log(!directionCourseInPlan);
+        if(!directionCourseInPlan) throw `This direction ${JSON.stringify(direction)} and this course - ${course} doesn't in studyPlan`
+        return directionCourseInPlan;
     }
     
 }

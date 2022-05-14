@@ -20,6 +20,9 @@ export class Group {
     @Column({default: true})
     countStudents: number = 0;
 
+    @Column()
+    course: number;
+
     @ManyToOne(() => Direction, (direction) => direction.groups)
     direction: Direction;
 

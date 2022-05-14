@@ -13,28 +13,13 @@ export class LessonGetService {
         @InjectRepository(Lesson) private lessonRepository: Repository<Lesson>,
     ){}
     
-    // async getLessons(idLessonInfo: string): Promise<any> {
-    //     const massiveLessonGroup = await 
-    //     this.lessonRepository.createQueryBuilder('lesson')
-    //     .leftJoinAndSelect("lesson.lessonInfo", "lessonInfo")
-    //     .leftJoinAndMapOne("lessonInfo.studyPlan", "lessonInfo.studyPlan", "studyPlan")
-    //     .leftJoinAndMapOne("lesson.teacher", "lesson.teacher", "teacher")
-    //     .leftJoinAndMapOne("lesson.subject", "lesson.subject", "subject")
-    //     .leftJoinAndMapOne("lesson.group", "lesson.group", "group")
-    //     .leftJoinAndMapOne("lesson.audience", "lesson.audience", "audience")
-    //     .leftJoinAndMapOne("lesson.periods", "lesson.periods", "periods")
-    //     .where("lesson.lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
-    //     .getMany()
-    //     return massiveLessonGroup;
-    // }
-
     async getLessons(idLessonInfo: string): Promise<any> {
+
         const massiveLessonGroup = await 
         this.lessonRepository.createQueryBuilder('lesson')
-        .where("lesson.lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
         .leftJoinAndMapOne("lesson.teacher", "lesson.teacher", "teacher")
-        .leftJoinAndMapOne("lesson.lessonInfo", "lesson.lessonInfo", "lessonInfo")
         .leftJoinAndMapOne("lesson.subject", "lesson.subject", "subject")
+        .leftJoinAndMapOne("lesson.typeLesson", "lesson.typeLesson", "typeLesson")
         .leftJoinAndMapOne("lesson.audience", "lesson.audience", "audience")
         .leftJoinAndMapOne("lesson.periods", "lesson.periods", "periods")
         .where("lesson.lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
@@ -45,6 +30,8 @@ export class LessonGetService {
         .createQueryBuilder('lessonInfo')
         .leftJoinAndMapOne("lessonInfo.group", "lessonInfo.group", "lesson_info")
         .leftJoinAndMapOne("lessonInfo.studyPlan", "lessonInfo.studyPlan", "study_plan")
+        .leftJoinAndMapOne("study_plan.direction", "study_plan.direction", "direction")
+        .leftJoinAndMapOne("direction.institute", "direction.institute", "institute")
         .where("lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
         .getOne()
 

@@ -19,9 +19,14 @@ export class GroupService {
             if(!direction) throw `This nameDirection not found ${nameDirection}`
             const group = new Group();
             group.nameGroup = groupedGroups[numberStroke][0];
+            group.course = groupedGroups[numberStroke][2];
             group.direction = direction;
             await this.groupRepository.save(group);
         }
+    }
+
+    async getInstiuteByIdGroup(idGroup: number): Promise<any> {
+
     }
     
 }

@@ -24,5 +24,9 @@ export class AudienceService {
 
         }
     }
+
+    async getFreeAudience(params: any): Promise<any> {
+        
+    }
     
 }

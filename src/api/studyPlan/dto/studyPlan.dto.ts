@@ -6,4 +6,5 @@ export class CreateStudyPlanDto {
     data_start: Date;
     data_end: Date;
     dataSubjects: Subject[];
+    course: number;
 }
