@@ -5,6 +5,7 @@ const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { VueLoaderPlugin } = require("vue-loader");
 const HtmlWebpackPugPlugin = require('html-webpack-pug-plugin');
 
 
@@ -14,9 +15,19 @@ const plugins = () =>  {
     const basePlugins = [
         
         new CleanWebpackPlugin(),
+        new VueLoaderPlugin(),
         new HTMLWebpackPlugin({
-            template:  path.join(__dirname, 'app/index.pug'),
-            filename: 'index.html',
+            template:  path.join(__dirname, 'app/roles/admin/html/admin.pug'),
+            filename: `html/admin.html`,
+            chunks: ['admin'],
+            minify: {
+                collapseWhitespace: isProd
+            }
+        }),
+        new HTMLWebpackPlugin({
+            template:  path.join(__dirname, 'app/roles/user/html/user.pug'),
+            filename: `html/user.html`,
+            chunks: ['user'],
             minify: {
                 collapseWhitespace: isProd
             }
@@ -24,12 +35,9 @@ const plugins = () =>  {
         new MiniCssExtractPlugin({
             filename: `./css/${filename('css')}`
         }),
-      
-       
     ];
     if(isProd){
         basePlugins.push(
-            
               require('autoprefixer'),
         )
     }
@@ -40,22 +48,17 @@ const plugins = () =>  {
 module.exports = {
     context: path.resolve(__dirname, 'app'),
     mode: 'development',
-    entry: '/js/index.js',
+    entry: {
+        admin: '../app/roles/admin/js/admin.js',
+        user: '../app/roles/user/js/user.js',
+    },
     target: process.env.NODE_ENV === "development" ? "web" : "browserslist",
     watch: true,
     output: {
         filename: `./js/${filename('js')}` ,
-        path: path.resolve(__dirname, '../views'),
-        assetModuleFilename: 'dist/[name][ext]'
+        path: (isProd) ? path.resolve(__dirname, '../views') : path.resolve(__dirname, 'dist'),
+        assetModuleFilename: 'dist/[name][ext]',
     },
-    // mode: 'development',
-    // entry: './app/js/index.ts',
-    // target: process.env.NODE_ENV === "development" ? "web" : "browserslist",
-    // watch: true,
-    // output: {
-    //   filename: 'bundle.js',
-    //   path: path.resolve(__dirname, 'dist'),
-    // },
     devServer: {
         historyApiFallback: true,
         static: path.join(__dirname, 'dist'),
@@ -74,6 +77,10 @@ module.exports = {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
                 exclude: /node_modules/,
+            },
+            {
+                test: /\.vue$/,
+                loader: "vue-loader",
             },
             
             {
@@ -101,9 +108,11 @@ module.exports = {
         
         ],
     resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
-    },
-        
+        alias: {
+            vue$: "vue/dist/vue.runtime.esm.js",
+        },
+        extensions: ['.ts', '.js', '*', 'vue', '.json'],
+    },  
     },
               
             {

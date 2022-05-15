@@ -14,15 +14,16 @@ export class LessonCreateService {
     
     async createLesson(dataLesson: LessonDto): Promise<void> {
         const { idLesson } = dataLesson;
-        this.addRelationsToLesson(dataLesson);
+
         const lesson = this.addRelationsToLesson(dataLesson);
         
         if(idLesson) {
             lesson.id = idLesson;
             await this.updateLesson(lesson);
+            return;
         }
 
-        this.addLesson(lesson);
+        await this.addLesson(lesson);
     }
 
     async updateLesson(lesson: Lesson): Promise<void> {
