@@ -7,20 +7,20 @@ import {
   UseInterceptors, 
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { AudienceService }  from './audience.service';
+import { BuildingService }  from './building.service';
 import excelConverter from '../../converters/excelConverter';
 
 
-@Controller('api/audience')
-export class AudienceController {
-    constructor(private readonly audienceService: AudienceService){}
+@Controller('api/building')
+export class BuildingController {
+    constructor(private readonly buildingService: BuildingService){}
 
     @Post('upload')
     @UseInterceptors(FileInterceptor('excel'))
     async createAudience(@UploadedFile() excelFile) {
         try {
-            const dataAudince = await excelConverter(excelFile);
-            await this.audienceService.createAudience(dataAudince);
+            const dataBuilding = await excelConverter(excelFile);
+            await this.buildingService.createBuildings(dataBuilding);
             return 'save';
         } catch (error) {
             return error;
@@ -28,13 +28,12 @@ export class AudienceController {
     }
 
     @Get()
-    async getAudience(@Param() params: any): Promise<string> {
+    async getBuildings(): Promise<any> {
         try {
-            console.log(params);
+            
             return;
         } catch (error) {
             
         }
     }
-
 }

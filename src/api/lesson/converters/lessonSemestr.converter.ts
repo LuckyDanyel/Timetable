@@ -14,25 +14,26 @@ export function lessonConverterSemestr(dataLessons: any): any {
     const { direction, id: idStudyPlan, course, start_semester, end_semester } =  studyPlan;
     const { id: idDirection, nameDirection, codeDirection, institute } = direction;
     const { massiveLessonGroup: massiveLessons } = dataLessons;
+    console.log(massiveLessons);
     const configureDate = createConfigureWeeks(start_semester, end_semester);
     const weekStructure = createStructureWeeksLessons(configureDate);
     const groupWeeks = groupWeeksOnMonth(weekStructure, configureDate);
     const monthWeeksLessons = addLessonsToWeeks(groupWeeks, massiveLessons, configureDate);
     return {
         idLessonInfo,
+        group,
+        institute,
         studyPlan: {
             idStudyPlan,
             course,
             start_semester,
             end_semester,
         },
-        institute,
         direction: {
             idDirection,
             nameDirection,
             codeDirection,
         },
-        group,
         monthWeeksLessons,
     } 
     
@@ -105,22 +106,23 @@ function addLessonsToWeeks(DataWeeksOnMonth: WeekLessons[], lessonData: Lesson[]
         const dayIndexDateLesson = date.getDay();
         const monthDateLesson = date.getMonth();
         const monthForLessonInData = DataWeeksOnMonth[monthDateLesson];
-        // console.log("Предмет - " , date.toLocaleString())
+        
         for(let weekLesson in monthForLessonInData) {
             const startDayWeek = monthForLessonInData[weekLesson].startWeek;
             const endDayWeek = monthForLessonInData[weekLesson].endWeek;
             const currentWeek = monthForLessonInData[weekLesson];
-            // console.log("Старт - ", monthForLessonInData[weekLesson].startWeek.toLocaleString());
-            // console.log("Конец - ", monthForLessonInData[weekLesson].endWeek.toLocaleString());
-            if(+startDayWeek <= +date && +date <= +endDayWeek) {
-                const nameDay = massiveDays[dayIndexDateLesson];
+            
+            const inRange = +startDayWeek <= +date && +date <= +endDayWeek;
+            
+            if(inRange) {
+                
                 if(!currentWeek.massiveLessonsOnWeek) {
                     currentWeek.massiveLessonsOnWeek = {};
                 }
-                if(!currentWeek.massiveLessonsOnWeek[nameDay]) {
-                    currentWeek.massiveLessonsOnWeek[nameDay] = [];
+                if(!currentWeek.massiveLessonsOnWeek[dayIndexDateLesson]) {
+                    currentWeek.massiveLessonsOnWeek[dayIndexDateLesson] = [];
                 }
-                currentWeek.massiveLessonsOnWeek[nameDay].push(lesson);
+                currentWeek.massiveLessonsOnWeek[dayIndexDateLesson].push(lesson);
             }
         } 
     }

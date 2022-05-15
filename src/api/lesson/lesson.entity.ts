@@ -29,7 +29,7 @@ export class Lesson {
     periods: Periods;
 
     @ManyToOne(() => Audience, (audience) => audience.lessons)
-    audience: Periods;
+    audience: Audience;
 
     @ManyToOne(() => LessonInfo, (lessonInfo) => lessonInfo.lessons)
     lessonInfo: LessonInfo

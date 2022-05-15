@@ -9,6 +9,7 @@ import { LessonCreateService } from "./services/lesson.create.service";
 import { LessonGetService } from "./services/lesson.get.service";
 import { lessonConverterSemestr } from "./converters/lessonSemestr.converter";
 import { TypeLessonService } from "../typeLesson/typeLesson.service";
+import { LessonDto } from "./dto/lesson.dto";
 
 
 @Controller('api/lesson')
@@ -20,9 +21,9 @@ export class LessonController {
         ){}
 
     @Post('create')
-    async createLessons(@Body() dataLesons: any): Promise<string> {
+    async createLessons(@Body() dataLesons: LessonDto): Promise<string> {
         try {
-            await this.lessonCreateService.createLessons(dataLesons);
+            await this.lessonCreateService.createLesson(dataLesons);
             return 'save'
         } catch (error) {
             return error

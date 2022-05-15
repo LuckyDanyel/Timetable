@@ -40,5 +40,10 @@ export class LessonGetService {
             massiveLessonGroup
         }
     }
+
+    async getLessonByDate(dateStroke: string): Promise<Lesson[]> {
+        const result = await this.lessonRepository.find({ date: dateStroke })
+        return result;
+    }
     
 }

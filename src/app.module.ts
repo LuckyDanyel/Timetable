@@ -15,6 +15,7 @@ import { LessonModule } from './api/lesson/lesson.module';
 import { LessonInfoModule } from './api/lessonInfo/lessonInfo.module';
 import { TypeLessonModule } from './api/typeLesson/typeLesson.module';
 import { LessonEditModule } from './api/lessonEdit/lessonEdit.module';
+import { BuildingModule } from './api/building/building.module';
 
 
 
@@ -36,6 +37,7 @@ import { LessonEditModule } from './api/lessonEdit/lessonEdit.module';
     LessonInfoModule,
     TypeLessonModule,
     LessonEditModule,
+    BuildingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

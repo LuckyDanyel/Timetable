@@ -4,9 +4,10 @@ import { AudienceController } from "./audience.controller";
 import { AudienceService } from "./audience.service";
 import { Audience } from "./audience.entity";
 import { Lesson } from "../lesson/lesson.entity";
+import { Building } from "../building/building.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Audience, Lesson])],
+    imports: [TypeOrmModule.forFeature([Audience, Lesson, Building])],
     controllers: [AudienceController],
     providers: [AudienceService],
 })

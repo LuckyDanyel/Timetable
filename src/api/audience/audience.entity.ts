@@ -3,8 +3,10 @@ import {
     Entity, 
     PrimaryGeneratedColumn,
     OneToMany,
+    ManyToOne,
 } from "typeorm";
 import { Lesson } from "../lesson/lesson.entity";
+import { Building } from "../building/building.entity";
 
 @Entity()
 export class Audience {
@@ -14,10 +16,10 @@ export class Audience {
     @Column()
     nameAudince: string;
 
-    @Column()
-    nameStructure: string;
-
     @OneToMany(() => Lesson, (lesson) => lesson.audience)
     lessons: Lesson[]
+
+    @ManyToOne(() => Building, (building) => building.audiences)
+    building: Building;
 
 }
