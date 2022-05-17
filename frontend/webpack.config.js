@@ -4,7 +4,6 @@ const webpack = require('webpack');
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { VueLoaderPlugin } = require("vue-loader");
 const HtmlWebpackPugPlugin = require('html-webpack-pug-plugin');
 
@@ -15,26 +14,14 @@ const plugins = () =>  {
     const basePlugins = [
         
         new CleanWebpackPlugin(),
+        new HTMLWebpackPlugin({
+            template:  path.join(__dirname, 'app/pages/index.html'),
+            filename: `html/index.html`,
+            minify: {
+                collapseWhitespace: isProd
+            }
+        }),
         new VueLoaderPlugin(),
-        new HTMLWebpackPlugin({
-            template:  path.join(__dirname, 'app/roles/admin/html/admin.pug'),
-            filename: `html/admin.html`,
-            chunks: ['admin'],
-            minify: {
-                collapseWhitespace: isProd
-            }
-        }),
-        new HTMLWebpackPlugin({
-            template:  path.join(__dirname, 'app/roles/user/html/user.pug'),
-            filename: `html/user.html`,
-            chunks: ['user'],
-            minify: {
-                collapseWhitespace: isProd
-            }
-        }),
-        new MiniCssExtractPlugin({
-            filename: `./css/${filename('css')}`
-        }),
     ];
     if(isProd){
         basePlugins.push(
@@ -48,10 +35,7 @@ const plugins = () =>  {
 module.exports = {
     context: path.resolve(__dirname, 'app'),
     mode: 'development',
-    entry: {
-        admin: '../app/roles/admin/js/admin.js',
-        user: '../app/roles/user/js/user.js',
-    },
+    entry: '../app/pages/main.js',
     target: process.env.NODE_ENV === "development" ? "web" : "browserslist",
     watch: true,
     output: {
@@ -69,23 +53,30 @@ module.exports = {
        
 
     },
-    plugins: plugins(),
     devtool: 'source-map',
-    module:{
+    module: {
         rules:[
-            {
-                test: /\.tsx?$/,
-                use: 'ts-loader',
-                exclude: /node_modules/,
-            },
             {
                 test: /\.vue$/,
                 loader: "vue-loader",
             },
+            {
+                test: /\.js/,
+                exclude: /node_modules/,
+                use: ['babel-loader'],
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader',
+                    'sass-loader', 
+                ],
+            },
             
             {
                 test: /\.pug$/,
-                loader: 'pug-loader',
+                loader: 'pug-plain-loader',
                     options: {
                         pretty: true
                     }
@@ -93,38 +84,6 @@ module.exports = {
             {
                 test: /\.html$/,
                 loader: 'html-loader'
-            },
-            {
-                test: /\.css$/i,
-                use: [
-                {
-                loader: MiniCssExtractPlugin.loader,
-                options: {
-                    hmr: isDev,     
-                },
-            },
-            'css-loader',
-            
-        
-        ],
-    resolve: {
-        alias: {
-            vue$: "vue/dist/vue.runtime.esm.js",
-        },
-        extensions: ['.ts', '.js', '*', 'vue', '.json'],
-    },  
-    },
-              
-            {
-                test: /\.s[ac]ss$/,
-                use: [MiniCssExtractPlugin.loader, 
-                    
-                    'css-loader', 
-                    'resolve-url-loader',
-                    'sass-loader', 
-                    'postcss-loader',
-                    
-                ],
             },
             {
                 test: /\.(svg|eot|ttf|woff|woff2|otf)$/,
@@ -144,12 +103,14 @@ module.exports = {
                     
                 }
             },
-            {
-                test: /\.js/,
-                exclude: /node_modules/,
-                use: ['babel-loader'],
-            },
-           
-        ]
-    }
+        ],           
+    },
+    resolve: {
+        extensions: [ '.jsx', '.tsx', '.ts', '.js', '.vue' ],
+        alias: {
+            'vue': '@vue/runtime-dom',
+            '@': path.resolve(__dirname, 'app'),
+        }
+    },
+    plugins: plugins(),
 };
