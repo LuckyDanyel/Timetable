@@ -1,9 +1,8 @@
-import user from "./settings";
+import { user } from "@/api/settings";
 
 export async function uploadData(data, url){
-    
-    return await user.post({
-        methods: 'post',
+    return await user({
+        method:'post',
         url,
         data,
     })

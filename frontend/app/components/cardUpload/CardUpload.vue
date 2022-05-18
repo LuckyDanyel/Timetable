@@ -1,25 +1,39 @@
 <script>
 import { ref, computed } from "vue";
+
 export default {
     
     props: {
         nameUpload: String,
+        position: String,
+        api: String,
     },
-    setup() {
-        const excelFile = ref(null);
-        const nameFile = ref("Выберите файл");
-
+    setup(props, context) {
+        const nameFile = ref("Название файла");
         function setValue(event) {
-            if(event.target?.files[0]?.name) {
-                nameFile.value = event.target.files[0].name;
+            const excelFile = event?.target?.files[0]
+            if(excelFile) {
+                const formData = new FormData();
+                formData.append('excel', excelFile);
+                nameFile.value = excelFile.name;
+
+                const { nameUpload, position, api } = props;
+
+                context.emit('uploadFile', {
+                    excelData: formData,
+                    nameUpload,
+                    position,
+                    api, 
+                });
+
                 return;
             }
-            nameFile.value = "Выберите файл";
+            nameFile.value = "Название файла";
         }
         return {
-            excelFile,
             nameFile,
             setValue,
+            position: props.position,
         }
     },
 }
@@ -30,16 +44,15 @@ export default {
         <h2 class="card-upload__h2">{{ nameUpload }}</h2>
         <form class="card-upload__form" action="">
             <div class="card-upload__wrapper">
-                <input type="file" class="card-upload__input" @change="this.setValue" name="excel" id="file" required="required">
-                <label for="file" class="card-upload__button">Загрузить файл</label>
-                <p class="card-upload__text">{{ this.nameFile }}</p>
+                <input type="file" class="card-upload__input" @change="setValue" name="excel" :id="position" required="required">
+                <label :for="position" class="card-upload__button">Загрузить файл</label>
+                <p class="card-upload__text">{{ nameFile }}</p>
             </div>
         </form>
     </div>
 </template>
 
 <style lang="scss">
-    @import url('@/scss/main.scss');
 
     .card-upload {
         max-width: 320px;
@@ -49,8 +62,9 @@ export default {
         align-items: center;
         border: 1px solid black;
         border-radius: 20px;
-        padding-top: 40px;
+        padding-top: 10px;
         padding-bottom: 20px;
+        margin-bottom: 20px;
     }
     .card-upload__form {
         width: 100%;
