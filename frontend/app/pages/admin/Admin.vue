@@ -1,39 +1,24 @@
 <script>
-import UploadDataUniversity from '@/components/uploadDataUniversity/UploadDataUniversity.vue'
 import { ref } from "vue";
+import UploadDataUniversity from '@/components/uploadDataUniversity/UploadDataUniversity.vue'
+import useModal from "@/composition/useModal/useModal";
+import StudyPlan from "@/components/studyPlan/StudyPlan.vue";
+import { getData } from "@/api/university";
 
 export default {
     components: {
-        UploadDataUniversity
-    },
+    UploadDataUniversity,
+    StudyPlan,
+},
 
     setup() {
-        const showModalFirst = ref(false);
-        const openModalFirst = () => {
-            showModalFirst.value = true;
-        }
-        const closeModalFirst = () => {
-            showModalFirst.value = false;
-        }
 
-        const showModalSecond = ref(false);
-        const openModalSecond = () => {
-            showModalSecond.value = true;
-        }
-        const closeModalSecond = () => {
-            showModalSecond.value = false;
-        }
+        const modalUpload = useModal();
+        const modalCreateStudy = useModal();
 
         return {
-            showModalFirst,
-            closeModalFirst,
-            openModalFirst,
-
-            showModalSecond,
-            openModalSecond,
-            closeModalSecond,
-
-
+            modalUpload,
+            modalCreateStudy,
         }
     }
 }
@@ -42,17 +27,19 @@ export default {
 <template>
     <div class="main-admin">
         <div class="main-admin__wrapper">
-            <dialog-modal :show="showModalFirst" @close-modal="closeModalFirst">
+            <dialog-modal :show="modalUpload.showModal" @close-modal="modalUpload.closeModal">
                 <upload-data-university></upload-data-university>
             </dialog-modal>
 
-            <dialog-modal :show="showModalSecond" @close-modal="closeModalSecond">
-                <div class="">dsaaaaaaa</div>
-            </dialog-modal>
+            <suspense>
+                <dialog-modal :show="modalCreateStudy.showModal" @close-modal="modalCreateStudy.closeModal">
+                    <study-plan></study-plan>
+                </dialog-modal>
+            </suspense>
 
-            <a class="main-admin__button-upload" @click="openModalSecond">Второе окно</a>
+            <a class="main-admin__button-upload" @click="modalUpload.openModal">Загрузка начальный данных</a>
 
-            <a class="main-admin__button-upload" @click="openModalFirst">Загрузка начальный данных</a>
+            <a class="main-admin__button-upload" @click="modalCreateStudy.openModal">Создать план</a>
 
         </div>       
     </div>

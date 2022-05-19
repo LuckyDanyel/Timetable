@@ -7,3 +7,10 @@ export async function uploadData(data, url){
         data,
     })
 }
+
+export async function getData(url){
+    return await user({
+        method:'get',
+        url,
+    })
+}

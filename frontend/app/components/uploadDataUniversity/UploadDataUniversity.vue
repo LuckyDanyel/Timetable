@@ -1,4 +1,5 @@
 <script>
+import { ref } from 'vue'
 import CardUpload from '../cardUpload/CardUpload.vue'
 import { dataCard } from './data/dataCard';
 import { uploadData } from '@/api/university';
@@ -9,6 +10,7 @@ export default {
     },
     setup(props, context) {
         const universityDataSend = {};
+        const loaderStart = ref(false);
 
         const addFile = (dataUpload) => {
             const { position } = dataUpload;
@@ -16,21 +18,27 @@ export default {
         } 
 
         const sendFiles = async () => {
-            for(let position in universityDataSend) {
-                try {
-                    const data = universityDataSend[position];
-                    const { excelData, api:url } = data;
-                    await uploadData(excelData, url);
-                } catch (error) {
-                    console.log(error);
+            loaderStart.value = true;
+            await setTimeout(async () => {
+                for(let position in universityDataSend) {
+                    try {
+                        const data = universityDataSend[position];
+                        const { excelData, api:url } = data;
+                        await uploadData(excelData, url);
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
-            }
+                loaderStart.value = false;
+            }, 2000);
+        
         }
 
         return {
             dataCard,
             addFile,
             sendFiles,
+            loaderStart,
         }
     }
 }
@@ -46,8 +54,9 @@ export default {
             @uploadFile="addFile"
             > 
         </card-upload>
-        <a @click="sendFiles" class="upload-univeristy__button">Загрузить данные</a>
-        <loader></loader>
+        <a @click="sendFiles" class="upload-univeristy__button"> Загрузить данные
+            <loader :show="loaderStart"></loader>
+        </a>
     </div>
 </template>
 
@@ -70,6 +79,7 @@ export default {
         text-align: center;
         color: white;
         border-radius: 8px;
+        position: relative;
         cursor: pointer;
 
     }
