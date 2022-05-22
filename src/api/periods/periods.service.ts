@@ -14,7 +14,7 @@ export class PeriodsService {
     async createPeridos(): Promise<void> {
         for(let periodData of dataPeriods) {
             const period = new Periods();
-            period.numberPeriod = periodData.numberPeriod;
+            period.name = periodData.name;
             period.start_time = periodData.start_time;
             period.end_time = periodData.end_time;
             const isPeriodInTable = await this.periodsRepository.findOne(period);

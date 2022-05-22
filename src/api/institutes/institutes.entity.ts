@@ -14,7 +14,7 @@ export class Institute {
     id: number;
 
     @Column()
-    nameInstitute: string;
+    name: string;
 
     @Column()
     typeInstitute: string;

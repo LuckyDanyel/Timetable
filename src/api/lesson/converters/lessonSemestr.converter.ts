@@ -12,7 +12,7 @@ export function lessonConverterSemestr(dataLessons: any): any {
     const { lessonInfo } = dataLessons;
     const { id: idLessonInfo, group, studyPlan } = lessonInfo;
     const { direction, id: idStudyPlan, course, start_semester, end_semester } =  studyPlan;
-    const { id: idDirection, nameDirection, codeDirection, institute } = direction;
+    const { id: idDirection, name, codeDirection, institute } = direction;
     const { massiveLessonGroup: massiveLessons } = dataLessons;
     console.log(massiveLessons);
     const configureDate = createConfigureWeeks(start_semester, end_semester);
@@ -31,7 +31,7 @@ export function lessonConverterSemestr(dataLessons: any): any {
         },
         direction: {
             idDirection,
-            nameDirection,
+            name,
             codeDirection,
         },
         monthWeeksLessons,

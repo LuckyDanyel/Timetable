@@ -14,7 +14,7 @@ export class InstituteService {
     async createInstitutes(groupInstitute: any): Promise<void> {
         for(let numberStroke in groupInstitute) {
             const institute = new Institute();
-            institute.nameInstitute = groupInstitute[numberStroke][0];
+            institute.name = groupInstitute[numberStroke][0];
             institute.typeInstitute = groupInstitute[numberStroke][1];
             const isIstituteInTable = await this.InstituteRepository.findOne(institute);
             if(!isIstituteInTable) {

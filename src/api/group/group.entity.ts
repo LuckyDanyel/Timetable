@@ -15,7 +15,7 @@ export class Group {
     id: number;
 
     @Column()
-    nameGroup: string;
+    name: string;
 
     @Column({default: true})
     countStudents: number = 0;

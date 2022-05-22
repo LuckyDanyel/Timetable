@@ -15,7 +15,7 @@ export class Direction {
     id: number;
 
     @Column()
-    nameDirection: string;
+    name: string;
 
     @Column()
     codeDirection: string;

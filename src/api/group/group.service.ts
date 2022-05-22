@@ -14,11 +14,11 @@ export class GroupService {
     
     async createGroups(groupedGroups: any): Promise<void> {
         for(let numberStroke in groupedGroups) {
-            const nameDirection = groupedGroups[numberStroke][1];
-            const direction = await this.directionRepository.findOne({ nameDirection });
-            if(!direction) throw `This nameDirection not found ${nameDirection}`
+            const name = groupedGroups[numberStroke][1];
+            const direction = await this.directionRepository.findOne({ name });
+            if(!direction) throw `This name not found ${name}`
             const group = new Group();
-            group.nameGroup = groupedGroups[numberStroke][0];
+            group.name = groupedGroups[numberStroke][0];
             group.course = groupedGroups[numberStroke][2];
             group.direction = direction;
             await this.groupRepository.save(group);

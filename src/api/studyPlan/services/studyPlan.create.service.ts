@@ -22,13 +22,13 @@ export class StudyPlanService {
         const direction = new Direction();
 
         direction.id = dataDirections.id;
-        direction.nameDirection = dataDirections.nameDirection;
+        direction.name = dataDirections.name;
         direction.codeDirection = dataDirections.codeDirection;
 
         for(let subjectInfo of dataSubjects) {
             const subject = new Subject();
             subject.id = subjectInfo.id;
-            subject.nameSubject = subjectInfo.nameSubject;
+            subject.name = subjectInfo.name;
             massiveSubjects.push(subject);
         }
 

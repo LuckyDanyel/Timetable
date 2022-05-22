@@ -12,7 +12,7 @@ export class Periods {
     id: number;
 
     @Column()
-    numberPeriod: number;
+    name: number;
 
     @Column()
     start_time: string;

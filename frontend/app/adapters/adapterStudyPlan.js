@@ -14,7 +14,7 @@ export const adapterStudyPlan = (dataStudyPlan) => {
 export const adapterInstitute = (dataInstitute) => {
     const resutl = [];
     for(let institute of dataInstitute) {
-        const { nameInstitute: name, id } = institute;
+        const { name: name, id } = institute;
         resutl.push({
             name,
             id,
@@ -27,7 +27,7 @@ export const adapterInstitute = (dataInstitute) => {
 export const adapterDirection = (dataDirection) => {
     const resutl = [];
     for(let direction of dataDirection) {
-        const { nameDirection: name, id, institute } = direction;
+        const { name: name, id, institute } = direction;
         resutl.push({
             name,
             id,
@@ -40,7 +40,7 @@ export const adapterDirection = (dataDirection) => {
 export const adapterSubject = (dataSubjects) => {
     const resutl = [];
     for(let subject of dataSubjects) {
-        const { nameSubject: name, id, institutes } = subject;
+        const { name: name, id, institutes } = subject;
         resutl.push({
             name,
             id,

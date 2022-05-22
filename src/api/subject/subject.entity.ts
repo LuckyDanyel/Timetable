@@ -17,7 +17,7 @@ export class Subject {
     id: number;
 
     @Column()
-    nameSubject: string;
+    name: string;
 
     @ManyToMany(() => Teacher)
     @JoinTable()

@@ -5,7 +5,7 @@
     "username": "root",
     "password": "root",
     "database": "University",
-    "synchronize": false,
+    "synchronize": true,
     "entities": ["./dist/api/**/*.entity.js"],
     "migrations": ["dist/migration/**/*.js"],
     "subscribers": ["dist/subscriber/**/*.js"],

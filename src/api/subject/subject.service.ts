@@ -21,9 +21,9 @@ export class SubjectService {
             const massiveTeacher = await this.getMassiveTeachers(dataTeacher);
             const massiveInstitute = await this.getMassiveInstitute(dataInstitute);
             
-            const nameSubject = groupRows[subjectStroke][0];
+            const name = groupRows[subjectStroke][0];
             const subject = new Subject();
-            subject.nameSubject = nameSubject;
+            subject.name = name;
             subject.teacher = [...massiveTeacher];
             subject.institutes = [...massiveInstitute];
             await this.subjectRepository.save(subject);
@@ -53,17 +53,17 @@ export class SubjectService {
     async getMassiveInstitute(dataInstitute: string): Promise<Institute[]> {
         const result: Institute[] = [];
         const masiveNameInstitues = dataInstitute.split(',');
-        for(let nameInstitute of masiveNameInstitues) {
-            const savedInstitue = await this.getInstitute(nameInstitute);
+        for(let name of masiveNameInstitues) {
+            const savedInstitue = await this.getInstitute(name);
             result.push(savedInstitue);
         }
 
         return result;
     }
 
-    async getInstitute(nameInstitute: string): Promise<Institute> {
-        const institute = await this.instituteRepository.findOne({ nameInstitute: nameInstitute });
-        if(!institute) throw `This institute ${nameInstitute} is not found`;
+    async getInstitute(name: string): Promise<Institute> {
+        const institute = await this.instituteRepository.findOne({ name: name });
+        if(!institute) throw `This institute ${name} is not found`;
 
         return institute;
     }

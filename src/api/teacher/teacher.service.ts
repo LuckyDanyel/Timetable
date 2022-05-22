@@ -14,17 +14,17 @@ export class TeacherService {
     
     async createTeachers(groupTeachers: any): Promise<void> {
         for(let numberStroke in groupTeachers) {
-            const nameInstitute = groupTeachers[numberStroke][5];
-            const institute = await this.isInstituteInTable(nameInstitute);
+            const name = groupTeachers[numberStroke][5];
+            const institute = await this.isInstituteInTable(name);
             const teacher = this.setFieldTeacher(groupTeachers[numberStroke], institute);
             await this.saveTeacher(teacher);
         }
     }
 
-    async isInstituteInTable(nameInstitute: string): Promise<Institute> {
-        const institute = await this.instituteRepository.findOne({ nameInstitute });
+    async isInstituteInTable(name: string): Promise<Institute> {
+        const institute = await this.instituteRepository.findOne({ name });
 
-        if(!institute) throw `this institute ${nameInstitute} not found`;
+        if(!institute) throw `this institute ${name} not found`;
 
         return institute;
     }

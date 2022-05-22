@@ -14,7 +14,7 @@ export class Audience {
     id: number;
 
     @Column()
-    nameAudince: string;
+    name: string;
 
     @OneToMany(() => Lesson, (lesson) => lesson.audience)
     lessons: Lesson[]

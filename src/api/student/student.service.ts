@@ -14,11 +14,11 @@ export class StudentService {
     
     async createStudents(groupStudents: any): Promise<void> {
         for(let numberStroke in groupStudents) {
-            const nameGroup = groupStudents[numberStroke][4];
-            const group = await this.GroupRepository.findOne({ nameGroup });
-            if(!group) throw `This group ${nameGroup} is not found`;
+            const name = groupStudents[numberStroke][4];
+            const group = await this.GroupRepository.findOne({ name });
+            if(!group) throw `This group ${name} is not found`;
             const student = new Student();
-            student.nameStudent = groupStudents[numberStroke][0];
+            student.name = groupStudents[numberStroke][0];
             student.surname = groupStudents[numberStroke][1];
             student.patronymic = groupStudents[numberStroke][2];
             student.numberCardStudent = groupStudents[numberStroke][3];

@@ -18,12 +18,12 @@ export class AudienceService {
             const numberBuilding = groupAudiences[numberStroke][1];
             const building = await this.getBuilding(numberBuilding);
             const audience = new Audience();
-            audience.nameAudince = nameAuidence;
+            audience.name = nameAuidence;
             audience.building = building;
             console.log(audience);
             const isAudienceInTable = await this.audienceRepository.findOne(audience);
             console.log(audience);
-            if(isAudienceInTable) throw `this audience ${ JSON.stringify( audience.nameAudince ) } in table`
+            if(isAudienceInTable) throw `this audience ${ JSON.stringify( audience.name ) } in table`
 
             await this.audienceRepository.save(audience);
 

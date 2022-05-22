@@ -1,5 +1,5 @@
 export class DirectionDto {
     id: number;
-    nameDirection: string;
+    name: string;
     codeDirection: string;
 }

@@ -14,11 +14,11 @@ export class DirectionService {
     
     async createDirections(groupDirections: any): Promise<void> {
         for(let numberStroke in groupDirections) {
-            const nameInstitute = groupDirections[numberStroke][2];
-            const institute = await this.instituteRepository.findOne({ nameInstitute })
-            if(!institute) throw `This institute is not found ${nameInstitute}`; 
+            const name = groupDirections[numberStroke][2];
+            const institute = await this.instituteRepository.findOne({ name })
+            if(!institute) throw `This institute is not found ${name}`; 
             const direction = new Direction();
-            direction.nameDirection = groupDirections[numberStroke][0];
+            direction.name = groupDirections[numberStroke][0];
             direction.codeDirection = groupDirections[numberStroke][1];
             direction.institute = institute;
             await this.directionRepository.save(direction);
