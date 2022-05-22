@@ -1,9 +1,8 @@
 <script>
 import { ref } from "vue";
-import UploadDataUniversity from '@/components/uploadDataUniversity/UploadDataUniversity.vue'
 import useModal from "@/composition/useModal/useModal";
+import UploadDataUniversity from '@/components/uploadDataUniversity/UploadDataUniversity.vue'
 import StudyPlan from "@/components/studyPlan/StudyPlan.vue";
-import { getData } from "@/api/university";
 
 export default {
     components: {

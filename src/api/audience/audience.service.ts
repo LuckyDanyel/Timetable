@@ -20,9 +20,7 @@ export class AudienceService {
             const audience = new Audience();
             audience.name = nameAuidence;
             audience.building = building;
-            console.log(audience);
             const isAudienceInTable = await this.audienceRepository.findOne(audience);
-            console.log(audience);
             if(isAudienceInTable) throw `this audience ${ JSON.stringify( audience.name ) } in table`
 
             await this.audienceRepository.save(audience);
