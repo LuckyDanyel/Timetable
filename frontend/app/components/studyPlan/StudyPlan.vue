@@ -1,69 +1,32 @@
 <script>
 import { computed, reactive, ref, unref } from 'vue';
 import { getData, uploadData } from '@/api/university';
-import dataCourse from './dataCourse';
-import Loader from '../UI/Loader.vue';
+import useInstitute from '@/composition/useInstitute/useInstitute';
 
 export default {
-  components: { Loader },
     
     async setup(props) {
-        const curretnInstutute = reactive({ id: null, name: null });
-        const currentDirection = reactive({ id: null, name: null });
-        const currentSubject = reactive({ id: null, name: null });
-        let dateStart = null;
-        let dateEnd = null;
         const loaderStart = ref(false);
-        const currentCourse = { name: null };
-        let outPutSubjects = reactive({});
-        
-
         const url = 'studyPlan/';
         const { data: dataStudyPlan } = await getData(url);
-        const { dataDirections, dataInstitutes, dataSubjects } = dataStudyPlan;
-
-        const changeInstitute = (selectedInstite) => {
-            curretnInstutute.id = selectedInstite.id;
-            curretnInstutute.name = selectedInstite.name;
-            deleteAllSubjects();
-        }
-
-        const cgangeDirecton = (selectedDirection) => {
-            currentDirection.id = selectedDirection.id;
-            currentDirection.name = selectedDirection.name;
-        }
-
-        const cgangeSubject = (selectedSubject) => {
-            currentSubject.id = selectedSubject.id;
-            currentSubject.name = selectedSubject.name;
-            addSubject(selectedSubject);
-        }
-
-        const changeCourse = (selectedCourse) => {
-            currentCourse.name = selectedCourse.name;
-        }
-
-        const changeDateStart = (event) => {
-            const date = new Date(event.target.value);
-            dateStart = date.toJSON();
-        }
-        const changeDateEnd = (event) => {
-            const date = new Date(event.target.value);
-            dateEnd = date.toJSON();
-        }
-
-        const deleteSubject = (keySubject) => {
-            delete outPutSubjects[keySubject];
-        }
-
-        const addSubject = (value) => {
-            outPutSubjects[value.id] = value;
-        }
-        const deleteAllSubjects = () => {
-            for(const key in outPutSubjects) {
-                delete outPutSubjects[key];
-            }
-        }
+        const { 
+            dataInstitutes,
+            dataCourse,
+            changeInstitute,
+            cgangeDirecton,
+            cgangeSubject,
+            changeCourse,
+            changeDateStart,
+            changeDateEnd,
+            filterDirectionByInstitute,
+            filterSubjectByInstitute,
+            outPutSubjects,
+            deleteSubject,
+            currentDirection,
+            dateStart,
+            dateEnd,
+            currentCourse,
+            } = useInstitute(dataStudyPlan);
 
         const toArray = (object) => {
             const result = [];
@@ -72,15 +35,15 @@ export default {
                 result.push({...value});
             }
             return result;
-        }
+        }   
 
         const createStudyPlan = async () => {
             loaderStart.value = true;
             const massiveSubject = toArray(outPutSubjects);
             const data = {
                 dataDirections: { ...currentDirection },
-                data_start: dateStart,
-                data_end: dateEnd,
+                data_start: unref(dateStart),
+                data_end: unref(dateEnd),
                 dataSubjects: massiveSubject,
                 course: currentCourse.name,
             }
@@ -88,25 +51,7 @@ export default {
                 const res = await uploadData(data, url);
                 loaderStart.value = false;
             }, 2000)
-            
         }
-
-        const filterDirectionByInstitute = computed(() => {
-            const result = dataDirections.filter((direction) => { return direction.institute.id === curretnInstutute.id});
-            return result; 
-        })
-
-        const filterSubjectByInstitute = computed(() => {
-            const result = dataSubjects.filter((subject) => {
-                for(let institute of subject.institutes) {
-                    if(institute.id === curretnInstutute.id ) {
-                        return subject;
-                    }
-                }
-            })
-            return result;
-
-        })
 
         return {
             dataInstitutes,
@@ -116,12 +61,12 @@ export default {
             cgangeSubject,
             changeCourse,
             changeDateStart,
-            createStudyPlan,
             changeDateEnd,
             filterDirectionByInstitute,
             filterSubjectByInstitute,
             outPutSubjects,
             deleteSubject,
+            createStudyPlan,
             loaderStart,
         }
         

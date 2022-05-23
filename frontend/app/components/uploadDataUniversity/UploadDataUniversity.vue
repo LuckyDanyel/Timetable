@@ -19,7 +19,7 @@ export default {
 
         const sendFiles = async () => {
             loaderStart.value = true;
-            await setTimeout(async () => {
+            setTimeout(async () => {
                 for(let position in universityDataSend) {
                     try {
                         const data = universityDataSend[position];

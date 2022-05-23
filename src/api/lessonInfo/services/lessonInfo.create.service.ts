@@ -14,37 +14,38 @@ export class LessonInfoCreateService {
     ){}
     
     async createLessonInfo(dataLessons: any): Promise<void> {
-        const { dataGroup } = dataLessons;
+        const { groups } = dataLessons;
+        const studyPlan = await this.getStudyPlanOnDirectionAndCourse(dataLessons);
 
-        const studyPlan = await this.getStudyPlanOnDirectionAndCourse(dataLessons.dataGroup);
-        await this.IsGroupHasLessonInfo(dataGroup);
-
-        const lessonInfo = new LessonInfo();
-        lessonInfo.group = dataGroup;
-        lessonInfo.studyPlan = studyPlan;
-        
-        await this.lessonInfoRepository.save(lessonInfo);
+        for(let group of groups) {
+            const lessonInfo = new LessonInfo();
+            lessonInfo.group = group;
+            lessonInfo.studyPlan = studyPlan;
+            await this.lessonInfoRepository.save(lessonInfo);
+        }
     }
 
-    async IsGroupHasLessonInfo(group: Group) {
-        const groupInLessonInfo = await getManager().getRepository(LessonInfo)
-        .createQueryBuilder("lesson_info")
-        .leftJoinAndSelect('lesson_info.group', "direction")
-        .where("lesson_info.group.id = :groupId", { groupId: group.id })
-        .getOne();
-        if(groupInLessonInfo) throw `This group ${JSON.stringify(group)} has infoLessons`
-        return groupInLessonInfo;
+    async getGroupsOnDirection(dataLessons: any) {
+        const { direction, course } = dataLessons;
+        console.log(direction);
+        const groupsOnDirection = await getManager().getRepository(Group)
+        .createQueryBuilder("group")
+        .leftJoinAndSelect('group.direction', "direction")
+        .where("group.direction.id = :directionId", { directionId: direction.id })
+        .andWhere("group.course = :courseNumber", { courseNumber: course })
+        .getMany();
+        if(groupsOnDirection.length === 0) throw `Not found groups on this direction - ${JSON.stringify(direction.name)} and this course - ${JSON.stringify(course)}`
+        return groupsOnDirection;
     }
 
-    async getStudyPlanOnDirectionAndCourse(dataGroup: Group): Promise<StudyPlan> {
-        const { direction, course } = dataGroup;
+    async getStudyPlanOnDirectionAndCourse(dataLessons: Group): Promise<StudyPlan> {
+        const { direction, course } = dataLessons;
         const directionCourseInPlan = await getManager().getRepository(StudyPlan)
         .createQueryBuilder("study_plan")
         .leftJoinAndSelect('study_plan.direction', "direction")
         .where("study_plan.direction.id = :directionId", { directionId: direction.id })
         .andWhere("study_plan.course = :courseNumber", { courseNumber: course })
         .getOne();
-        console.log(!directionCourseInPlan);
         if(!directionCourseInPlan) throw `This direction ${JSON.stringify(direction)} and this course - ${course} doesn't in studyPlan`
         return directionCourseInPlan;
     }

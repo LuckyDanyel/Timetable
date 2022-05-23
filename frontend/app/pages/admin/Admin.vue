@@ -3,21 +3,27 @@ import { ref } from "vue";
 import useModal from "@/composition/useModal/useModal";
 import UploadDataUniversity from '@/components/uploadDataUniversity/UploadDataUniversity.vue'
 import StudyPlan from "@/components/studyPlan/StudyPlan.vue";
+import LessonInfo from "@/components/lessonInfo/LessonInfo.vue";
 
 export default {
     components: {
     UploadDataUniversity,
     StudyPlan,
+    LessonInfo
 },
 
     setup() {
 
         const modalUpload = useModal();
         const modalCreateStudy = useModal();
+        const modalCreateLesson = useModal();
+        const modalLessonInfo = useModal();
 
         return {
             modalUpload,
             modalCreateStudy,
+            modalCreateLesson,
+            modalLessonInfo,
         }
     }
 }
@@ -36,16 +42,23 @@ export default {
                 </dialog-modal>
             </suspense>
 
+            <suspense>
+                <dialog-modal :show="modalLessonInfo.showModal" @close-modal="modalLessonInfo.closeModal">
+                    <lesson-info></lesson-info>
+                </dialog-modal>
+            </suspense>
+
             <a class="main-admin__button-upload" @click="modalUpload.openModal">Загрузка начальный данных</a>
 
             <a class="main-admin__button-upload" @click="modalCreateStudy.openModal">Создать план</a>
+
+            <a class="main-admin__button-upload" @click="modalLessonInfo.openModal">Показать созданные расписания</a>
 
         </div>       
     </div>
 </template>
 
 <style lang="scss">
-    @import url('@/scss/main.scss');
 
 .main-admin__wrapper {
     max-width: 820px;

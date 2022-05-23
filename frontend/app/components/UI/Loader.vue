@@ -11,12 +11,9 @@ export default {
 
     setup(props) {
         const { show } = toRefs(props);
-        const endLoader = ref(false);
-
 
         return {
             show,
-            endLoader,
         }
     }
 }
@@ -37,11 +34,17 @@ export default {
     opacity: 0;
 }
 .loader{
-    display: inline-block;
     position: absolute;
-    top: 50%;                         
+    width: 100%;
+    height: 100%;
+    background-color: #2591DE;
+    top: 50%;
     transform: translate(0, -50%);
-    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    left: 0;
 }
 .loader-start:after {
     content: " ";

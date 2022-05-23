@@ -14,7 +14,7 @@ export class LessonInfoController {
         private readonly lessonInfoGetService: LessonInfoGetService
         ){}
 
-    @Post()
+    @Post('create')
     async createAudience(@Body() dataLessonInfo: any) {
         try {
             await this.lessonInfoCreateService.createLessonInfo(dataLessonInfo);
