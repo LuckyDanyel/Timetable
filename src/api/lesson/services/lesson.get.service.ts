@@ -22,6 +22,7 @@ export class LessonGetService {
         .leftJoinAndMapOne("lesson.typeLesson", "lesson.typeLesson", "typeLesson")
         .leftJoinAndMapOne("lesson.audience", "lesson.audience", "audience")
         .leftJoinAndMapOne("lesson.periods", "lesson.periods", "periods")
+        .leftJoinAndMapOne("lesson.dayWeek", "lesson.dayWeek", "dayWeek")
         .where("lesson.lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
         .getMany()
 

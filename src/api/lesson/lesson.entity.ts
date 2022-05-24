@@ -10,6 +10,7 @@ import { Periods } from "../periods/periods.entity";
 import { Audience } from "../audience/audience.entity";
 import { LessonInfo } from "../lessonInfo/lessonInfo.entity";
 import { TypeLesson } from "../typeLesson/typeLesson.entity";
+import { DayWeek } from "../dayWeek/dayWeek.entity";
 
 @Entity()
 export class Lesson {
@@ -36,5 +37,8 @@ export class Lesson {
 
     @ManyToOne(() => TypeLesson, (typeLesson) => typeLesson.lessons)
     typeLesson: TypeLesson;
+
+    @ManyToOne(() => DayWeek, (dayWeek) => dayWeek.lessons)
+    dayWeek: DayWeek;
 
 }

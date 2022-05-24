@@ -16,7 +16,6 @@ export class LessonCreateService {
         const { idLesson } = dataLesson;
 
         const lesson = this.addRelationsToLesson(dataLesson);
-        
         if(idLesson) {
             lesson.id = idLesson;
             await this.updateLesson(lesson);
@@ -43,9 +42,10 @@ export class LessonCreateService {
             audience,
             subject,
             teacher,
+            dayWeek,
         } = dataLesson;
 
-        if(idLessonInfo && dataTypeLesson && audience && subject && teacher && period && date) {
+        if(idLessonInfo && dataTypeLesson && audience && subject && teacher && period && date && dayWeek) {
             const lessonInfo = new LessonInfo();
             lessonInfo.id = idLessonInfo;
 
@@ -57,6 +57,7 @@ export class LessonCreateService {
             lesson.audience = audience;
             lesson.subject = subject;
             lesson.teacher = teacher;
+            lesson.dayWeek = dayWeek;
 
             return lesson;
         }

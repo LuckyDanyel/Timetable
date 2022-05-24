@@ -13,9 +13,10 @@ import { Periods } from "../periods/periods.entity";
 import { Audience } from "../audience/audience.entity";
 import { LessonInfo } from "../lessonInfo/lessonInfo.entity";
 import { TypeLesson } from "../typeLesson/typeLesson.entity";
+import { DayWeek } from "../dayWeek/dayWeek.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Lesson, Subject, Teacher, Periods, Audience, LessonInfo, TypeLesson])],
+    imports: [TypeOrmModule.forFeature([Lesson, Subject, Teacher, Periods, Audience, LessonInfo, TypeLesson, DayWeek])],
     controllers: [LessonController],
     providers: [LessonCreateService, LessonGetService, TypeLessonService],
 })

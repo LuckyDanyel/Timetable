@@ -31,7 +31,7 @@ export class LessonController {
     }
 
     @Get(':id')
-    async getLessonsEdint(@Param('id') id: string): Promise<string> {
+    async getLessonsEdit(@Param('id') id: string): Promise<string> {
         try {
             const dataLessons = await this.lessonGetService.getLessons(id);
             const result = lessonConverterSemestr(dataLessons);
