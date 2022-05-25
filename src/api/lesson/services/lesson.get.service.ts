@@ -22,10 +22,10 @@ export class LessonGetService {
         .leftJoinAndMapOne("lesson.typeLesson", "lesson.typeLesson", "typeLesson")
         .leftJoinAndMapOne("lesson.audience", "lesson.audience", "audience")
         .leftJoinAndMapOne("lesson.periods", "lesson.periods", "periods")
-        .leftJoinAndMapOne("lesson.dayWeek", "lesson.dayWeek", "dayWeek")
         .where("lesson.lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
         .getMany()
-
+        
+        console.log('tut');
         const lessonInfo = await 
         getManager().getRepository(LessonInfo)
         .createQueryBuilder('lessonInfo')
@@ -35,10 +35,10 @@ export class LessonGetService {
         .leftJoinAndMapOne("direction.institute", "direction.institute", "institute")
         .where("lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
         .getOne()
-
+        
         return {
             lessonInfo,
-            massiveLessonGroup
+            massiveLessonGroup: (massiveLessonGroup) ? massiveLessonGroup: [],
         }
     }
 

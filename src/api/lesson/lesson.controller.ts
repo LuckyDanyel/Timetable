@@ -37,7 +37,7 @@ export class LessonController {
             const result = lessonConverterSemestr(dataLessons);
             return result;
         } catch (error) {
-            
+            return error;
         }
     }
 }

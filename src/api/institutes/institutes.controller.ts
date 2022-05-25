@@ -18,7 +18,6 @@ import { Institute } from "./institutes.entity";
 import { InstituteService }  from './istitutes.service';
 import { PeriodsService } from "../periods/periods.service";
 import { TypeLessonService } from "../typeLesson/typeLesson.service";
-import { DayWeekService } from "../dayWeek/dayWeek.service";
 import excelConverter from "../../converters/excelConverter";
 
 
@@ -28,14 +27,12 @@ export class InstitutesController {
       private readonly instituteService: InstituteService,
       private readonly periodsService: PeriodsService,
       private readonly typeLessonService: TypeLessonService,
-      private readonly dayWeekService: DayWeekService,
       ){}
 
     @Post('upload')
     @UseInterceptors(FileInterceptor('excel'))
     async uploadfile(@UploadedFile() file: any): Promise<string> {
         try {
-          await this.dayWeekService.createDayWeeks();
           await this.periodsService.createPeridos();
           await this.typeLessonService.createTypeLesson();
           

@@ -1,17 +1,23 @@
 <script>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { getData } from '@/api/university'
 import dateFormat from '@/adapters/dateFormat';
 
 export default {
-    async setup() {
-        const selectedLesson = ref(null);
+    async setup(props, context) {
+        const router = useRouter();
         const url = 'lessonInfo/get';
         const { data: massiveLessonInfo } = await getData(url);
+
+        const goToAdminMonth = (idLessonInfo) => {
+            router.push({ path: `/admin/month/${idLessonInfo}`})
+        } 
 
         return {
             massiveLessonInfo,
             dateFormat,
+            goToAdminMonth,
         }
     }
 }
@@ -30,9 +36,10 @@ export default {
             <div class="lesson-info__item lesson-info__value lesson-info__third">{{ dateFormat(lessonInfo.studyPlan.start_semester) }}</div>
             <div class="lesson-info__item lesson-info__value lesson-info__four">{{ dateFormat(lessonInfo.studyPlan.end_semester) }}</div>
             <div class="lesson-info__item lesson-info__value lesson-info__five">{{ lessonInfo.group.course }}</div>
-            <div class="lesson-info__button">Открыть</div>
+            <div class="lesson-info__button" @click="goToAdminMonth(lessonInfo.id)">Открыть</div>
         </div>
     </div>
+    <router-view></router-view>
 </template>
 <style lang="scss">
     .lesson-info {

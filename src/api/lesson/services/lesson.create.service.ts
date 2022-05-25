@@ -42,10 +42,9 @@ export class LessonCreateService {
             audience,
             subject,
             teacher,
-            dayWeek,
         } = dataLesson;
 
-        if(idLessonInfo && dataTypeLesson && audience && subject && teacher && period && date && dayWeek) {
+        if(idLessonInfo && dataTypeLesson && audience && subject && teacher && period && date) {
             const lessonInfo = new LessonInfo();
             lessonInfo.id = idLessonInfo;
 
@@ -57,7 +56,7 @@ export class LessonCreateService {
             lesson.audience = audience;
             lesson.subject = subject;
             lesson.teacher = teacher;
-            lesson.dayWeek = dayWeek;
+            lesson.dayWeek = new Date(date).getDay();
 
             return lesson;
         }

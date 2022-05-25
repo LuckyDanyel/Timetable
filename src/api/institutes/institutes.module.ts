@@ -7,12 +7,10 @@ import { PeriodsService } from "../periods/periods.service";
 import { TypeLessonService } from "../typeLesson/typeLesson.service";
 import { TypeLesson } from "../typeLesson/typeLesson.entity";
 import { Periods } from "../periods/periods.entity";
-import { DayWeek } from "../dayWeek/dayWeek.entity";
-import { DayWeekService } from "../dayWeek/dayWeek.service";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Institute, Periods, TypeLesson, DayWeek])],
+    imports: [TypeOrmModule.forFeature([Institute, Periods, TypeLesson])],
     controllers: [InstitutesController],
-    providers: [InstituteService, PeriodsService, TypeLessonService, DayWeekService],
+    providers: [InstituteService, PeriodsService, TypeLessonService],
 })
 export class InstituteModule{}

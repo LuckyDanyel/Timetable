@@ -6,6 +6,8 @@ const massiveDays = ["ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"]
 class WeekLessons {
     startWeek: Date;
     endWeek: Date;
+    massiveLessonsOnWeek: {};
+    parity: number;
 }
 
 export function lessonConverterSemestr(dataLessons: any): any {
@@ -14,7 +16,6 @@ export function lessonConverterSemestr(dataLessons: any): any {
     const { direction, id: idStudyPlan, course, start_semester, end_semester } =  studyPlan;
     const { id: idDirection, name, codeDirection, institute } = direction;
     const { massiveLessonGroup: massiveLessons } = dataLessons;
-    console.log(massiveLessons);
     const configureDate = createConfigureWeeks(start_semester, end_semester);
     const weekStructure = createStructureWeeksLessons(configureDate);
     const groupWeeks = groupWeeksOnMonth(weekStructure, configureDate);
@@ -89,7 +90,13 @@ function createStructureWeeksLessons(dataConfigure: any): WeekLessons[] {
 function groupWeeksOnMonth(dataWeeks: WeekLessons[], dateConfigure: any): any {
     const { year, mouthNumber, countMonth } = dateConfigure;
     const groupData = {};
+    let count = 0;
+    let parity = 0;
     for(let week of dataWeeks) {
+        count++;
+        parity = count % 2;
+        week.massiveLessonsOnWeek = {};
+        week.parity = parity;
         const monthIndexEnd = week.endWeek.getMonth();
         if(!groupData[monthIndexEnd]) {
             groupData[monthIndexEnd] = []
@@ -115,10 +122,7 @@ function addLessonsToWeeks(DataWeeksOnMonth: WeekLessons[], lessonData: Lesson[]
             const inRange = +startDayWeek <= +date && +date <= +endDayWeek;
             
             if(inRange) {
-                
-                if(!currentWeek.massiveLessonsOnWeek) {
-                    currentWeek.massiveLessonsOnWeek = {};
-                }
+                console.log(currentWeek);
                 if(!currentWeek.massiveLessonsOnWeek[dayIndexDateLesson]) {
                     currentWeek.massiveLessonsOnWeek[dayIndexDateLesson] = [];
                 }
