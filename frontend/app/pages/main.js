@@ -1,6 +1,7 @@
 import './index.html';
 import { createApp } from "vue";
 import { createRouter, createWebHashHistory } from 'vue-router';
+import { store } from '@/store/store';
 
 import App from './App.vue';
 import { routes } from '@/routes/routes.js';
@@ -18,4 +19,5 @@ components.forEach(component => {
 
 
 app.use(router);
+app.use(store);
 app.mount('#app');

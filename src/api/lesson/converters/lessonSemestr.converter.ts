@@ -97,6 +97,9 @@ function groupWeeksOnMonth(dataWeeks: WeekLessons[], dateConfigure: any): any {
         parity = count % 2;
         week.massiveLessonsOnWeek = {};
         week.parity = parity;
+        for(let i = 1; i <= 6; i++) {
+            week.massiveLessonsOnWeek[i] = [];
+        }
         const monthIndexEnd = week.endWeek.getMonth();
         if(!groupData[monthIndexEnd]) {
             groupData[monthIndexEnd] = []

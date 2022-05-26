@@ -1,5 +1,6 @@
 <script>
 import { toRefs, unref, computed } from 'vue';
+import { routeLocationKey, useRouter } from 'vue-router';
 import dateFormat from '@/adapters/dateFormat';
 export default {
 
@@ -8,6 +9,7 @@ export default {
     },
 
     setup(props) {
+        const router = useRouter();
         const { data } = toRefs(props);
         const { indexMonth, weeks } = data.value;
         const dataParity = ['Четная', 'Нечетная'];
@@ -17,10 +19,16 @@ export default {
         const isEmpty = ((object) => {
             const { massiveLessonsOnWeek } = object;
             for(let lesson in massiveLessonsOnWeek) {
-                return true;
+                if(massiveLessonsOnWeek[lesson].length) {
+                    return true;
+                }
             }
             return false;
         })
+
+        const goToPageWeekLesson = (week) => {
+            router.push({ name: 'AdminWeek', params: {dataWeek: JSON.stringify(week)}})
+        }
 
         return {
             isEmpty,
@@ -28,6 +36,7 @@ export default {
             month,
             dataParity,
             dateFormat,
+            goToPageWeekLesson,
         }
     }
 }
@@ -35,9 +44,9 @@ export default {
 <template lang="">
     <div class="lesson-month">
         <div class="lesson-month__name"> {{ month }}</div>
-        <div class="lesson-month__item" v-for="week of weeks">
+        <div class="lesson-month__item" v-for="week of weeks" @click="goToPageWeekLesson(week)">
             <h2 class="lesson-month__parity lesson-month__font"> {{ dataParity[week.parity] }} </h2>
-            <p class="lesson-month__lesson lesson-month__font" v-if="isEmpty(week)">Составленное расписание</p>
+            <p class="lesson-month__lesson lesson-month__lesson_bold lesson-month__font" v-if="isEmpty(week)">Составленное расписание</p>
             <p class="lesson-month__lesson lesson-month__font" v-else>Пустое расписание</p>
             <div class="lesson-month__date lesson-month__font">
                 <span>Дата</span>
@@ -72,6 +81,10 @@ export default {
         width: 100%;
         background-color: #47A7EB;
         padding: 12px;
+            &:hover {
+                opacity: 0.75;
+                cursor: pointer;
+            }
     }
     .lesson-month__font {
         font-family: RobotoRegular;
