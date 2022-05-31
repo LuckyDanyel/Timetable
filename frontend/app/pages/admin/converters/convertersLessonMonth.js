@@ -1,9 +1,12 @@
 export default function(dataLesson) {
+    console.log(dataLesson);
     const { monthWeeksLessons, studyPlan } = dataLesson;
     const { end_semester, start_semester } = studyPlan;
     const monthStart = new Date(start_semester);
     const monthEnd = new Date(end_semester);
-    const countMonth = Math.abs(monthEnd.getMonth() - monthStart.getMonth()) + 1;
+    const timeDiff = Math.abs(monthStart.getTime() - monthEnd.getTime());
+    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+    const countMonth = Math.ceil(diffDays / 30);
     const result = [];
     for(let i = 0; i < countMonth; i++) {
         const indexMonth = monthStart.getMonth();

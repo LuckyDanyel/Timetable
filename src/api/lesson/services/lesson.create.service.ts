@@ -42,6 +42,8 @@ export class LessonCreateService {
             audience,
             subject,
             teacher,
+            dayIndex,
+            parity,
         } = dataLesson;
 
         if(idLessonInfo && dataTypeLesson && audience && subject && teacher && period && date) {
@@ -56,7 +58,8 @@ export class LessonCreateService {
             lesson.audience = audience;
             lesson.subject = subject;
             lesson.teacher = teacher;
-            lesson.dayWeek = new Date(date).getDay();
+            lesson.dayIndex = dayIndex;
+            lesson.parity = parity;
 
             return lesson;
         }

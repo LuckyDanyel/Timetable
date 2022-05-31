@@ -2,16 +2,20 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { getData } from '@/api/university'
+import { useStore } from 'vuex';
 import dateFormat from '@/adapters/dateFormat';
 
 export default {
     async setup(props, context) {
+        const store = useStore();
         const router = useRouter();
         const url = 'lessonInfo/get';
         const { data: massiveLessonInfo } = await getData(url);
 
-        const goToAdminMonth = (idLessonInfo) => {
-            router.push({ path: `/admin/month/${idLessonInfo}`})
+        const goToAdminMonth = async (idLessonInfo) => {
+            const url = `/lesson/${idLessonInfo}`;
+            await store.dispatch('getDataLessonMonth', url);
+            router.push({ path: `/admin/month/`})
         } 
 
         return {

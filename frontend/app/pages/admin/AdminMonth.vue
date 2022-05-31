@@ -1,11 +1,12 @@
 <script>
 import { useRoute, useRouter } from 'vue-router';
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, reactive } from 'vue';
 import { useStore } from 'vuex';
 
 import convertersLessonMonth from './converters/convertersLessonMonth';
 import dateFormat from '@/adapters/dateFormat';
 import LessonMoth from '@/components/lessonMonth/LessonMonth.vue';
+import useModal from '@/composition/useModal/useModal';
 export default {
     components: {
         LessonMoth,
@@ -14,8 +15,16 @@ export default {
     setup() {
         const store = useStore();
         const router = useRouter();
-        
-        const startLodaer = ref(false);
+        const currentWeekParity = reactive({});
+
+        const dataParity = [
+            {
+                id: 0, name: 'Четная'
+            },
+            {
+                id: 1, name: 'Нечетная'
+            }
+        ]
 
         const monthWeeksLessons = computed(() => {
             const dataLessonMonth = store.state.adminStore;
@@ -28,28 +37,20 @@ export default {
             return store.state.adminStore.studyPlan;
         })
 
-        onMounted(async () => {
-            const route = useRoute();
-            const idLessonInfo = route.params.idLessonInfo;
-            const url = `/lesson/${idLessonInfo}`;
-            startLodaer.value = true;
-            await store.dispatch('getDataLessonMonth', url);
-            startLodaer.value = false;
-        })
+
+        const changeWeekParity = (dataParityWeek) => {
+            currentWeekParity.id = dataParityWeek.id;
+            currentWeekParity.name = dataParityWeek.name;
+        }
 
         const goToPageLessonWeek = () => {
-            const currentDate = new Date(Date.now());
-            const getMonth = currentDate.getMonth();
-            const { monthWeeksLessons } = store.state.adminStore;
-            const weeksLessonsByMonth = monthWeeksLessons[getMonth];
-            for(let week of weeksLessonsByMonth) {
-                const startWeek = new Date(week.startWeek);
-                const endWeek = new Date(week.endWeek);
-                const inRange = +startWeek <= currentDate && currentDate <= +endWeek;
-                if(inRange) {
-                    router.push({ name: 'AdminWeek', params: { dataWeek: JSON.stringify(week) }})
-                }
+            if(!currentWeekParity) {
+                return;
             }
+            const { massiveDoubleLesson } = store.state.adminStore;
+            const parity = currentWeekParity.id;
+            console.log(parity);
+            router.push({ name: 'AdminWeek', params: { dataWeek: JSON.stringify(massiveDoubleLesson[parity]) }})
         }
 
         return {
@@ -57,8 +58,10 @@ export default {
             monthWeeksLessons,
             studyPlan,
             dateFormat,
-            startLodaer,
             goToPageLessonWeek,
+            dataParity,
+            changeWeekParity,
+            ...useModal(),
         }
     }
 }
@@ -68,17 +71,26 @@ export default {
         <div class="admin-month__wrapper">
             <div class="admin-month__container">
                 <div class="admin-month__group">Группа: {{ group.name }}
-                    <loader :show="startLodaer"> </loader>
                 </div>
                 <div class="admin-month__date">Дата расписания: {{ dateFormat(studyPlan.start_semester) }} - {{ dateFormat(studyPlan.end_semester) }} 
-                    <loader :show="startLodaer"> </loader>
                 </div>
             </div>
             <div class="admin-month__heading">Расписание на семместр</div>
             <lesson-moth v-for="lessonsMonth in monthWeeksLessons" :data="lessonsMonth"></lesson-moth>
-            <div class="admin-month__create" @click="goToPageLessonWeek">Создать расписание
-            <loader :show="startLodaer"> </loader>
-            </div>
+
+                <dialog-modal :show="showModal" @close-modal="closeModal">
+                    <select-data 
+                    heading="Выберите неделю" 
+                    :data="dataParity" 
+                    @selectValue="changeWeekParity"
+                    >
+                    </select-data>
+                    <div class="admin-month__margin-button">
+                        <div class="admin-month__create" @click="goToPageLessonWeek">Создать расписание на неделю</div>
+                    </div> 
+                </dialog-modal>
+
+            <div class="admin-month__create" @click="openModal">Создать расписание</div>
         </div>
     </div>
 <router-view></router-view>
@@ -136,7 +148,6 @@ export default {
         margin-bottom: 15px;
     }
     .admin-month__create {
-        position: relative;
         padding: 11px;
         width: 100%;
         font-family: RobotoSemiBold;
@@ -149,6 +160,9 @@ export default {
                 cursor: pointer;
                 opacity: 0.75;
             }
+    }
+    .admin-month__margin-button {
+        margin-top: 15px;
     }
     
 </style>

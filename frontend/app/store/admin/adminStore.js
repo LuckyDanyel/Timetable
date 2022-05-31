@@ -7,12 +7,13 @@ export const adminStore = {
         studyPlan: {},
         institute: {},
         group: {},
-        idLessonInfo: null, 
+        idLessonInfo: null,
+        massiveDoubleLesson: {},
     }),
 
     mutations: {
         setDataLessonMonth(state, data) {
-            const { monthWeeksLessons, direction, studyPlan, institute, group, idLessonInfo } = data;
+            const { monthWeeksLessons, direction, studyPlan, institute, group, idLessonInfo, groupDoubleWeeks } = data;
             console.log(data);
             state.monthWeeksLessons = monthWeeksLessons;
             state.direction = direction;
@@ -20,6 +21,7 @@ export const adminStore = {
             state.institute = institute;
             state.group = group;
             state.idLessonInfo = idLessonInfo;
+            state.massiveDoubleLesson = groupDoubleWeeks;
         },
         destroyState(state) {
             state.monthWeeksLessons = {};
@@ -28,6 +30,7 @@ export const adminStore = {
             state.institute = {};
             state.group = {};
             state.idLessonInfo = null;
+            state.massiveDoubleLesson = {};
         }
     },
     actions: {

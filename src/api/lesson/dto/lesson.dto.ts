@@ -7,6 +7,8 @@ import { Periods } from "src/api/periods/periods.entity";
 export class LessonDto {
     idLessonInfo: number;
     idLesson: number | null;
+    dayIndex: number;
+    parity: number;
     date: Date;
     dayWeek: number;
     dataTypeLesson: TypeLesson;

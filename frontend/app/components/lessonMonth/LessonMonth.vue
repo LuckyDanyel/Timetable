@@ -18,9 +18,13 @@ export default {
 
         const isEmpty = ((object) => {
             const { massiveLessonsOnWeek } = object;
-            for(let lesson in massiveLessonsOnWeek) {
-                if(massiveLessonsOnWeek[lesson].length) {
-                    return true;
+            for(let dayIndex in massiveLessonsOnWeek) {
+                const dayWeek = massiveLessonsOnWeek[dayIndex];
+                for(let numberPeriods in dayWeek) {
+                    const { dataLesson } = dayWeek[numberPeriods];
+                    if(dataLesson.length) {
+                        return true;
+                    }
                 }
             }
             return false;

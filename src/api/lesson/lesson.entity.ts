@@ -20,7 +20,10 @@ export class Lesson {
     date: Date;
 
     @Column()
-    dayWeek: number;
+    dayIndex: number;
+
+    @Column()
+    parity: number;
 
     @ManyToOne(() => Subject, (subject) => subject.lessons)
     subject: Subject;

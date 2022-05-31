@@ -23,5 +23,9 @@ export class PeriodsService {
             }
         }
     }
+    async getPeridods(): Promise<Periods[]> {
+        const result = await this.periodsRepository.find();
+        return result;
+    }
     
 }

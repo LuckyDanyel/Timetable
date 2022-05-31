@@ -6,7 +6,7 @@ import AdminWeek from '@/pages/admin/AdminWeek.vue';
 
 export const routes = [
     {path: '/admin', component: Admin},
-    {path: '/admin/month/:idLessonInfo', component: () => AmdinMonth, props: true },
+    {path: '/admin/month/', component: () => AmdinMonth, props: true },
     {path: '/admin/week/', name: 'AdminWeek', component: AdminWeek, props: true },
     {path: '/user', component: User},
 ]
