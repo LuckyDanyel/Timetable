@@ -1,6 +1,7 @@
 <script>
 import { toRefs, unref, computed } from 'vue';
 import { routeLocationKey, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import dateFormat from '@/adapters/dateFormat';
 export default {
 
@@ -10,6 +11,7 @@ export default {
 
     setup(props) {
         const router = useRouter();
+        const store = useStore();
         const { data } = toRefs(props);
         const { indexMonth, weeks } = data.value;
         const dataParity = ['Четная', 'Нечетная'];
@@ -31,7 +33,8 @@ export default {
         })
 
         const goToPageWeekLesson = (week) => {
-            router.push({ name: 'AdminWeek', params: {dataWeek: JSON.stringify(week)}})
+            store.commit('setCurrentWeek', week);
+            router.push({ name: 'AdminWeek'})
         }
 
         return {

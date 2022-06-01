@@ -16,6 +16,7 @@ export default {
         const store = useStore();
         const router = useRouter();
         const currentWeekParity = reactive({});
+        const dataMonthWeeksLessons = reactive({});
 
         const dataParity = [
             {
@@ -49,8 +50,8 @@ export default {
             }
             const { massiveDoubleLesson } = store.state.adminStore;
             const parity = currentWeekParity.id;
-            console.log(parity);
-            router.push({ name: 'AdminWeek', params: { dataWeek: JSON.stringify(massiveDoubleLesson[parity]) }})
+            store.commit("setCurrentWeek", massiveDoubleLesson[parity]);
+            router.push({ name: 'AdminWeek'})
         }
 
         return {
@@ -76,6 +77,7 @@ export default {
                 </div>
             </div>
             <div class="admin-month__heading">Расписание на семместр</div>
+            
             <lesson-moth v-for="lessonsMonth in monthWeeksLessons" :data="lessonsMonth"></lesson-moth>
 
                 <dialog-modal :show="showModal" @close-modal="closeModal">
