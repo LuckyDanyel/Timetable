@@ -21,7 +21,8 @@ export function lessonConverterSemestr(dataLessons: any): any {
     const groupWeeks = groupWeeksOnMonth(weekStructure, periods);
 
     const groupDoubleWeeks = createStructureDoubleLesson(massiveLessonGroupDouble, periods);
-    const monthWeeksLessons = addLessonsToWeeks(groupWeeks, massiveLessons, configureDate);
+    
+    const monthWeeksLessons = addLessonsToWeeks(groupWeeks, massiveLessonGroupDouble, configureDate);
     return {
         idLessonInfo,
         group,
@@ -179,7 +180,7 @@ function createStructureDoubleLesson(massiveDoubleLesson: Lesson[], periods: any
         const weekParity = doubleLesson[parity];
         const dayWeek = weekParity[dayIndex]
         let dayPeriodNumber = dayWeek[numberPeriods];
-        dayPeriodNumber = lesson;
+        dayPeriodNumber.dataLesson = lesson;
     }
     return doubleLesson;
 }
