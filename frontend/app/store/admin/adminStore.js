@@ -2,46 +2,27 @@ import { getData } from "@/api/university"
 
 export const adminStore = {
     state: () => ({
-        monthWeeksLessons: {},
-        direction: {},
-        studyPlan: {},
-        institute: {},
-        group: {},
-        idLessonInfo: null,
-        massiveDoubleLesson: {},
+        dataCreateLesson: {},
     }),
 
     mutations: {
-        setDataLessonMonth(state, data) {
-            const { monthWeeksLessons, direction, studyPlan, institute, group, idLessonInfo, groupDoubleWeeks } = data;
-            console.log(data);
-            state.monthWeeksLessons = monthWeeksLessons;
-            state.direction = direction;
-            state.studyPlan = studyPlan;
-            state.institute = institute;
-            state.group = group;
-            state.idLessonInfo = idLessonInfo;
-            state.massiveDoubleLesson = groupDoubleWeeks;
+        setDataLessonCreate(state, data) {
+            const { dataCreateLesson } = data;
+            state.dataCreateLesson = dataCreateLesson;
         },
         destroyState(state) {
-            state.monthWeeksLessons = {};
-            state.direction = {};
-            state.studyPlan = {};
-            state.institute = {};
-            state.group = {};
-            state.idLessonInfo = null;
-            state.massiveDoubleLesson = {};
+            state.dataCreateLesson = {};
         }
     },
     actions: {
-        async getDataLessonMonth({ commit }, url) {
+        async getDataLessonCreate({ commit }, idLessonInfo) {
             try {
                 commit('destroyState');
-                const result = await getData(url);
-                const { data } = result;
-                commit('setDataLessonMonth', data);
+                const urlLessonEdit = `/lessonEdit/${idLessonInfo}`;
+                const { data } = await getData(urlLessonEdit);
+                commit('setDataLessonCreate', data);
             } catch (error) {
-                
+                console.log(error);
             }
         }
     }

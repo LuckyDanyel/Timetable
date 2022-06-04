@@ -23,7 +23,7 @@ export class TypeLessonService {
     }
 
     async getTypeLesson(id: number): Promise<TypeLesson> {
-        const typeLesson = await this.typeLessonRepository.findOne({ idTypeLesson: id })
+        const typeLesson = await this.typeLessonRepository.findOne({ id })
         return typeLesson;
     }
     

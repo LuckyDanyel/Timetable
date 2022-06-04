@@ -9,7 +9,7 @@ import { Lesson } from "../lesson/lesson.entity";
 @Entity()
 export class TypeLesson {
     @PrimaryGeneratedColumn()
-    idTypeLesson: number;
+    id: number;
 
     @Column()
     name: string;

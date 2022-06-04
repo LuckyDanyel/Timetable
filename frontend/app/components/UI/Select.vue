@@ -8,18 +8,14 @@ export default {
     props: {
         data: null,
         heading: null,
+        oldSelectValue: null,
     },
 
     setup(props, context) {
-        const { data } = toRefs(props);
+        const { data, oldSelectValue } = toRefs(props);
         const { heading } = props;
-
         const currentSelectName = ref('Выберите')
         const show = ref(false);
-
-        const toggleContainer = () => {
-            show.value = !show.value;
-        }
 
         const changeSelect = (index) => {
             currentSelectName.value = data.value[index]?.name;
@@ -28,8 +24,21 @@ export default {
             show.value = false;
         }
 
+        if(oldSelectValue.value?.id) {
+            const findIndex = data.value.find((value) => {
+                if(value.id === oldSelectValue.value.id) {
+                    currentSelectName.value = value.name;
+                }
+            });
+            
+        }
+
+        const toggleContainer = () => {
+            show.value = !show.value;
+        }
+
         watch(data, (data, prevdata) => {
-            currentSelectName.value = ('Выберите');
+            currentSelectName.value = 'Выберите';
         })
 
         return {
@@ -110,6 +119,8 @@ export default {
         width: 100%;
         position: absolute;
         z-index: 1;
+        max-height: 300px;
+        overflow: auto;
     }
 
     .select__item {

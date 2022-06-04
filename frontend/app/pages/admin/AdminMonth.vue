@@ -28,14 +28,14 @@ export default {
         ]
 
         const monthWeeksLessons = computed(() => {
-            const dataLessonMonth = store.state.adminStore;
+            const dataLessonMonth = store.state.commonStore;
             return convertersLessonMonth(dataLessonMonth);
         })
         const group = computed(() => {
-            return store.state.adminStore.group;
+            return store.state.commonStore.group;
         })
         const studyPlan = computed(() => {
-            return store.state.adminStore.studyPlan;
+            return store.state.commonStore.studyPlan;
         })
 
 
@@ -48,7 +48,7 @@ export default {
             if(!currentWeekParity) {
                 return;
             }
-            const { massiveDoubleLesson } = store.state.adminStore;
+            const { massiveDoubleLesson } = store.state.commonStore;
             const parity = currentWeekParity.id;
             store.commit("setCurrentWeek", massiveDoubleLesson[parity]);
             router.push({ name: 'AdminWeek'})

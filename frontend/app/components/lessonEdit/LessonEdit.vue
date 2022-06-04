@@ -1,41 +1,24 @@
 <script>
-import { reactive, ref } from 'vue';
-import { useStore } from 'vuex';
+import useLesson from '@/composition/useLesson/useLesson'
+
 export default {
 
     props: {
         lessonInfo: {
             required: true,
+        },
+        dayIndex: {
+            required: true,
         }
+
+        
     },
 
-    setup(props) {
-        const store = useStore();
-        const lessonInfo = props.lessonInfo;
-        const { dataLesson } = lessonInfo;
-        const isEmpty = ref(Object.keys(dataLesson).length == 0);
-        const role = store.state.commonStore.USER_ROLE;
-        let currentSubject = reactive({ name: null });
-        let currentTeacher = reactive({ name: null });
-        let currentAudience = reactive({ name: null });
-        let currentTypeLesson = reactive({ name: null }); 
-
-        if(!isEmpty.value) {
-            const { subject, teacher, audience, typeLesson } = dataLesson;
-            currentSubject = { ...subject };
-            currentTeacher = { ...teacher };
-            currentAudience = { ...audience };
-            currentTypeLesson = { ...typeLesson }; 
-        }
-
-        return {
-            isEmpty,
-            role,
-            currentSubject,
-            currentTeacher,
-            currentAudience,
-            currentTypeLesson,
-        }
+    setup(props, contenxt) {
+       
+       return {
+           ...useLesson(props, contenxt)
+       }
     }
     
 }
@@ -43,21 +26,67 @@ export default {
 <template lang="">
     <div class="lesson-edit">
         <div class="lesson-edit__content">
-            <div class="lesson-edit__hiden" v-show="!isEmpty">
-                <h2 class="lesson-edit__subject"> {{ currentSubject.name }} </h2>
-                <h2 class="lesson-edit__heading"> {{ currentTeacher.name }} </h2>
-                <h2 class="lesson-edit__heading"> {{ currentAudience.name }} </h2>
-                <h2 class="lesson-edit__heading"> {{ currentTypeLesson.name }} </h2>
+            <div class="lesson-edit__hiden" v-if="!isEmpty">
+                <h2 class="lesson-edit__subject"> {{ resultLesson.currentSubject.name }} </h2>
+                <h2 class="lesson-edit__heading"> {{ resultLesson.currentTeacher.nameInitials }} </h2>
+                <h2 class="lesson-edit__heading"> {{ resultLesson.currentAudience.name }} </h2>
+                <h2 class="lesson-edit__heading"> {{ resultLesson.currentTypeLesson.name }} </h2>
 
-                <div class="lesson-edit__button-edit" v-show="role === 'ADMIN'">
-                    <p>Редактировать</p>
+                <div class="lesson-edit__button-edit" v-if="role === 'ADMIN'">
+                    <p @click="addLesson">Редактировать</p>
+                </div>
+                <div class="lesson-edit__button-edit" v-if="role === 'ADMIN'">
+                    <p>Удалить</p>
                 </div>
             </div>
-            <div class="lesson-edit__create" v-show="isEmpty && role === 'ADMIN' ">
-                <p>Добавить расписание</p>
+            <div class="lesson-edit__create" v-if="isEmpty && role === 'ADMIN' ">
+                <p @click="addLesson">Добавить расписание</p>
             </div>
         </div>
+        <dialog-modal :show="showModal" @close-modal="closeModal">
+            <select-data 
+                :heading="'Выбрать тип занятия'" 
+                :data="dataTypeLessonLocal"
+                :oldSelectValue="currentTypeLesson"
+                @selectValue="changeTypeLesson"
+            >
+            </select-data>
+            <select-data 
+                :heading="'Выбрать корпус'" 
+                :data="dataBuildingsLocal"
+                :oldSelectValue="curretnBuilding" 
+                @selectValue="changeBuilding"
+            >
+            </select-data>
 
+            <select-data 
+                :heading="'Выбрать предмет'"
+                :data="dataSubjectsLocal"
+                :oldSelectValue="currentSubject" 
+                @selectValue="changeSubject"
+            >
+            </select-data>
+
+            <select-data 
+                :heading="'Выбрать преподавателя'"
+                :data="dataTeacherLocal"
+                :oldSelectValue="currentTeacher" 
+                @selectValue="changeTeacher"
+                
+            >
+            </select-data>
+
+             <select-data 
+                :heading="'Выбрать аудиторию'"
+                :data="filterAudienceByBuilding"
+                :oldSelectValue="currentAudience" 
+                @selectValue="changeAudience"
+            >
+            </select-data>
+
+            <div class="lesson-edit__save" @click="saveLesson">Сохранить</div>
+
+        </dialog-modal>
     </div>
 </template>
 <style lang="scss">
@@ -65,12 +94,15 @@ export default {
         margin: 8px 0;
         max-width: 160px;
         width: 100%;
-        height: 160px;
+        height: 180px;
         padding: 12px;
         background-color: #47A7EB;
         border-radius: 5px;
     }
     .lesson-edit__content {
+        height: 100%;
+    }
+    .lesson-edit__hiden {
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -143,6 +175,24 @@ export default {
                     }
             }
 
+    }
+    .lesson-edit__save {
+        width: 100%;
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-family: RobotoBold;
+        font-size: 16px;
+        background-color: #2591DE;
+        border-radius: 5px;
+        margin-top: 15px;
+
+        &:hover {
+            cursor: pointer;
+            opacity: 0.75;
+        }
     }
     
 </style>

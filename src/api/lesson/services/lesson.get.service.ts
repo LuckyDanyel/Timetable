@@ -21,6 +21,7 @@ export class LessonGetService {
         .leftJoinAndMapOne("lesson.subject", "lesson.subject", "subject")
         .leftJoinAndMapOne("lesson.typeLesson", "lesson.typeLesson", "typeLesson")
         .leftJoinAndMapOne("lesson.audience", "lesson.audience", "audience")
+        .leftJoinAndMapOne("audience.building", "audience.building", "building")
         .leftJoinAndMapOne("lesson.periods", "lesson.periods", "periods")
         .where("lesson.lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
         .andWhere("lesson.date is not null")

@@ -22,7 +22,7 @@ export class LessonEditController {
 	  	private readonly lessonGetService: LessonGetService,
       ){}
 
-    @Get(':idLessonInfo/:date')
+    @Get(':idLessonInfo')
     async getDataForEditLesson(@Param() params: any) {
         try {
 			const { idLessonInfo, date } = params;
@@ -31,20 +31,19 @@ export class LessonEditController {
 				this.lessonInfoGetService.getSubjectsStudyPlanByLessonid(idLessonInfo),
 				this.buildingService.getBuildings(),
 				this.audienceService.getAudiences(),
-				this.lessonGetService.getLessonByDate(date),
         ])
 			const dataTypeLesson = result[0];
 			const dataSubjects = result[1];
 			const dataBuildings = result[2];
 			const dataAudince = result[3];
-			const massiveLessons = result[4];
 
             return {
-				dataTypeLesson,
-				dataBuildings,
-				dataSubjects,
-				dataAudince,
-				massiveLessons,
+				dataCreateLesson: {
+					dataTypeLesson,
+					dataBuildings,
+					dataSubjects,
+					dataAudince,
+				}
             }
         } catch (error) {
             return error;

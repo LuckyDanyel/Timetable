@@ -13,8 +13,10 @@ export default {
         const { data: massiveLessonInfo } = await getData(url);
 
         const goToAdminMonth = async (idLessonInfo) => {
-            const url = `/lesson/${idLessonInfo}`;
-            await store.dispatch('getDataLessonMonth', url);
+            await Promise.all([
+                store.dispatch('getDataLessonCreate', idLessonInfo),
+                store.dispatch('getDataLesson', idLessonInfo),
+            ])
             router.push({ path: `/admin/month/`})
         } 
 

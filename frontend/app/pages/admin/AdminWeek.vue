@@ -26,8 +26,8 @@ export default {
     <div class="admin-week">
         <h1>Страница недели</h1>
         <div class="admin-week__container">
-            <div class="admin-week__day" v-for="day in massiveLessonsOnWeek">
-                <lesson-edit v-for="period in day" :lessonInfo="period"></lesson-edit>
+            <div class="admin-week__day" v-for="(day, index) in massiveLessonsOnWeek">
+                <lesson-edit v-for="period in day" :lessonInfo="period" :dayIndex="index"></lesson-edit>
             </div>
         </div>
     </div>
