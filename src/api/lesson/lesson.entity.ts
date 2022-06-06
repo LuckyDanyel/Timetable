@@ -16,7 +16,7 @@ export class Lesson {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ nullable: true })
     date: Date;
 
     @Column()

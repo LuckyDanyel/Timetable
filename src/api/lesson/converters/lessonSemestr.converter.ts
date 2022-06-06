@@ -22,7 +22,7 @@ export function lessonConverterSemestr(dataLessons: any): any {
 
     const groupDoubleWeeks = createStructureDoubleLesson(massiveLessonGroupDouble, periods);
     const monthWeeksLessonsDouble = addDoubleLesson(groupWeeks, groupDoubleWeeks);
-    const monthWeeksLessons = addLessonsToWeeks(monthWeeksLessonsDouble, massiveLessonGroupDouble, configureDate);
+    const monthWeeksLessons = addLessonsToWeeks(monthWeeksLessonsDouble, massiveLessons, configureDate);
     
     return {
         idLessonInfo,
@@ -177,8 +177,9 @@ function createStructureDoubleLesson(massiveDoubleLesson: Lesson[], periods: any
             week.massiveLessonsOnWeek[dayIndex] = {};
             for(let period of periods) {
                 const numberPeriods = week.massiveLessonsOnWeek[i];
-                period.dataLesson = {};
-                numberPeriods[period.name] = period;
+                let copyPeriod = {...period};
+                copyPeriod.dataLesson = {};
+                numberPeriods[copyPeriod.name] = copyPeriod;
             }
         }
     }
@@ -186,13 +187,10 @@ function createStructureDoubleLesson(massiveDoubleLesson: Lesson[], periods: any
     for(let lesson of massiveDoubleLesson) {
         const parity = lesson.parity;
         const dayIndex = lesson.dayIndex;
-        const numberPeriods = lesson.periods;
-
-        const weekParity = doubleLesson[parity];
-        const dayWeek = weekParity[dayIndex]
-        let dayPeriodNumber = dayWeek[numberPeriods];
-        dayPeriodNumber.dataLesson = lesson;
-        dayPeriodNumber.test = '1';
+        const { periods } = lesson;
+        const name = periods.name;
+        
+        doubleLesson[parity].massiveLessonsOnWeek[dayIndex][name].dataLesson = lesson;
     }
     return doubleLesson;
 }

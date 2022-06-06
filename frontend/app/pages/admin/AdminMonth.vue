@@ -51,6 +51,7 @@ export default {
             const { massiveDoubleLesson } = store.state.commonStore;
             const parity = currentWeekParity.id;
             store.commit("setCurrentWeek", massiveDoubleLesson[parity]);
+            store.commit("setTypeAddLesson", "DOUBLE");
             router.push({ name: 'AdminWeek'})
         }
 

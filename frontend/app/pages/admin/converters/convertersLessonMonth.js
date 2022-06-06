@@ -1,5 +1,5 @@
 export default function(dataLesson) {
-    console.log(dataLesson);
+
     const { monthWeeksLessons, studyPlan } = dataLesson;
     const { end_semester, start_semester } = studyPlan;
     const monthStart = new Date(start_semester);

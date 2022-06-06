@@ -12,17 +12,19 @@ export class LessonCreateService {
         @InjectRepository(Lesson) private lessonRepository: Repository<Lesson>,
     ){}
     
-    async createLesson(dataLesson: LessonDto): Promise<void> {
-        const { idLesson } = dataLesson;
+    async createLessons(dataLessons: LessonDto[]): Promise<void> {
+        for(let dataLesson of dataLessons) {
+            const { idLesson } = dataLesson;
 
-        const lesson = this.addRelationsToLesson(dataLesson);
-        if(idLesson) {
-            lesson.id = idLesson;
-            await this.updateLesson(lesson);
-            return;
+            const lesson = this.addRelationsToLesson(dataLesson);
+            if(idLesson) {
+                lesson.id = idLesson;
+                await this.updateLesson(lesson);
+                return;
+            }
+
+            await this.addLesson(lesson);
         }
-
-        await this.addLesson(lesson);
     }
 
     async updateLesson(lesson: Lesson): Promise<void> {
@@ -46,7 +48,7 @@ export class LessonCreateService {
             parity,
         } = dataLesson;
 
-        if(idLessonInfo && dataTypeLesson && audience && subject && teacher && period && date) {
+        if(idLessonInfo && dataTypeLesson && audience && subject && teacher && period) {
             const lessonInfo = new LessonInfo();
             lessonInfo.id = idLessonInfo;
 

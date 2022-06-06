@@ -9,9 +9,19 @@ export default {
         },
         dayIndex: {
             required: true,
+        },
+        idLessonInfo: {
+            required: true,
+        },
+        parity: {
+            required: true,
+        },
+        startWeek: {
+            required: true,
+        },
+        typeAddLesson: {
+            required: true,
         }
-
-        
     },
 
     setup(props, contenxt) {
@@ -36,7 +46,7 @@ export default {
                     <p @click="addLesson">Редактировать</p>
                 </div>
                 <div class="lesson-edit__button-edit" v-if="role === 'ADMIN'">
-                    <p>Удалить</p>
+                    <p @click="deleteAll">Удалить</p>
                 </div>
             </div>
             <div class="lesson-edit__create" v-if="isEmpty && role === 'ADMIN' ">
@@ -69,8 +79,8 @@ export default {
 
             <select-data 
                 :heading="'Выбрать преподавателя'"
-                :data="dataTeacherLocal"
-                :oldSelectValue="currentTeacher" 
+                :data="filterTeachersByBusy"
+                :oldSelectValue="currentTeacher"
                 @selectValue="changeTeacher"
                 
             >
@@ -78,13 +88,13 @@ export default {
 
              <select-data 
                 :heading="'Выбрать аудиторию'"
-                :data="filterAudienceByBuilding"
+                :data="filterAudienceByBusyAudience"
                 :oldSelectValue="currentAudience" 
                 @selectValue="changeAudience"
             >
             </select-data>
 
-            <div class="lesson-edit__save" @click="saveLesson">Сохранить</div>
+            <div class="lesson-edit__save" :style="[wrongValidate ? {'background-color' : '#de2525'} : {'background-color': '#2591DE'}]" @click="saveLesson">Сохранить</div>
 
         </dialog-modal>
     </div>

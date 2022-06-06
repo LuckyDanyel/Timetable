@@ -18,13 +18,14 @@ export default {
         const nameMonthes = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
         const month = nameMonthes[indexMonth];
 
-        const isEmpty = ((object) => {
+        const isDataLessonHasLesson = ((object) => {
             const { massiveLessonsOnWeek } = object;
             for(let dayIndex in massiveLessonsOnWeek) {
                 const dayWeek = massiveLessonsOnWeek[dayIndex];
                 for(let numberPeriods in dayWeek) {
                     const { dataLesson } = dayWeek[numberPeriods];
-                    if(dataLesson.length) {
+                    const dataLessonIsEmpty = Object.keys(dataLesson).length === 0;
+                    if(!dataLessonIsEmpty) {
                         return true;
                     }
                 }
@@ -34,11 +35,12 @@ export default {
 
         const goToPageWeekLesson = (week) => {
             store.commit('setCurrentWeek', week);
+            store.commit("setTypeAddLesson", "SINGLE");
             router.push({ name: 'AdminWeek'})
         }
 
         return {
-            isEmpty,
+            isDataLessonHasLesson,
             weeks,
             month,
             dataParity,
@@ -53,7 +55,7 @@ export default {
         <div class="lesson-month__name"> {{ month }}</div>
         <div class="lesson-month__item" v-for="week of weeks" @click="goToPageWeekLesson(week)">
             <h2 class="lesson-month__parity lesson-month__font"> {{ dataParity[week.parity] }} </h2>
-            <p class="lesson-month__lesson lesson-month__lesson_bold lesson-month__font" v-if="isEmpty(week)">Составленное расписание</p>
+            <p class="lesson-month__lesson lesson-month__lesson_bold lesson-month__font" v-if="isDataLessonHasLesson(week)">Составленное расписание</p>
             <p class="lesson-month__lesson lesson-month__font" v-else>Пустое расписание</p>
             <div class="lesson-month__date lesson-month__font">
                 <span>Дата</span>

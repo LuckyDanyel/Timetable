@@ -1,7 +1,7 @@
 import { getData } from "@/api/university"
 
 export const commonStore = {
-    state: () => ({
+    state: {
         USER_ROLE: 'ADMIN',
         currentWeek: {},
         monthWeeksLessons: {},
@@ -11,12 +11,12 @@ export const commonStore = {
         group: {},
         idLessonInfo: null,
         massiveDoubleLesson: {},
-    }),
+    },
 
     mutations: {
         setDataLessonMonth(state, data) {
             const { monthWeeksLessons, direction, studyPlan, institute, group, idLessonInfo, groupDoubleWeeks} = data;
-            console.log(data);
+            console.log('Установка данынех стору')
             state.monthWeeksLessons = monthWeeksLessons;
             state.direction = direction;
             state.studyPlan = studyPlan;
@@ -41,8 +41,7 @@ export const commonStore = {
     actions: {
         async getDataLesson({ commit }, idLessonInfo) {
             try {
-                commit('destroyState');
-                const urlLesson = `/lesson/${idLessonInfo}`;
+                const urlLesson = `/lesson/id/${idLessonInfo}`;
                 const { data } = await getData(urlLesson);
     
                 commit('setDataLessonMonth', data);

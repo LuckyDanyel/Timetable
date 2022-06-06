@@ -5,6 +5,7 @@ import { Lesson } from '../lesson.entity';
 import { LessonInfo } from "src/api/lessonInfo/lessonInfo.entity";
 import { StudyPlan } from "src/api/studyPlan/studyPlan.entity";
 import { Group } from "src/api/group/group.entity";
+import lessonGroupBusy from "../converters/lessonGroupBusy";
 
 @Injectable()
 export class LessonGetService {
@@ -33,6 +34,7 @@ export class LessonGetService {
         .leftJoinAndMapOne("lesson.subject", "lesson.subject", "subject")
         .leftJoinAndMapOne("lesson.typeLesson", "lesson.typeLesson", "typeLesson")
         .leftJoinAndMapOne("lesson.audience", "lesson.audience", "audience")
+        .leftJoinAndMapOne("audience.building", "audience.building", "building")
         .leftJoinAndMapOne("lesson.periods", "lesson.periods", "periods")
         .where("lesson.lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
         .andWhere("lesson.date is null")
@@ -60,6 +62,28 @@ export class LessonGetService {
     async getLessonByDate(dateStroke: string): Promise<Lesson[]> {
         const result = await this.lessonRepository.find({ date: dateStroke })
         return result;
+    }
+
+    async getLessonsByIndexDayAndPeriod(dataParams: any): Promise<Lesson[]> {
+        const { indexDay, parity, periodId, lessonInfoId } = dataParams;
+        console.log(indexDay, periodId);
+
+        const result = 
+        await this.lessonRepository.createQueryBuilder('lesson')
+        .leftJoinAndMapOne("lesson.teacher", "lesson.teacher", "teacher")
+        .leftJoinAndMapOne("lesson.typeLesson", "lesson.typeLesson", "typeLesson")
+        .leftJoinAndMapOne("lesson.subject", "lesson.subject", "subject")
+        .leftJoinAndMapOne("lesson.audience", "lesson.audience", "audience")
+        .leftJoinAndMapOne("lesson.periods", "lesson.periods", "periods")
+        .leftJoinAndMapOne("lesson.lessonInfo", "lesson.lessonInfo", "lessonInfo")
+        .leftJoinAndMapOne("lessonInfo.group", "lessonInfo.group", "group")
+        .leftJoinAndMapOne("group.direction", "group.direction", "direction")
+        .where("lesson.dayIndex = :indexDay", { indexDay })
+        .andWhere("lesson.parity = :parity", { parity })
+        .andWhere("lesson.periods.id = :periodId", { periodId })
+        .andWhere("lesson.lessonInfo.id != :lessonInfoId", { lessonInfoId })
+        .getMany()
+        return lessonGroupBusy(result);
     }
     
 }

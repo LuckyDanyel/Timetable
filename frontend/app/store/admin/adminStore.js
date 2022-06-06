@@ -3,12 +3,16 @@ import { getData } from "@/api/university"
 export const adminStore = {
     state: () => ({
         dataCreateLesson: {},
+        typeAddLesson: '',
     }),
 
     mutations: {
         setDataLessonCreate(state, data) {
             const { dataCreateLesson } = data;
             state.dataCreateLesson = dataCreateLesson;
+        },
+        setTypeAddLesson(state, data) {
+            state.typeAddLesson = data;
         },
         destroyState(state) {
             state.dataCreateLesson = {};
@@ -17,7 +21,6 @@ export const adminStore = {
     actions: {
         async getDataLessonCreate({ commit }, idLessonInfo) {
             try {
-                commit('destroyState');
                 const urlLessonEdit = `/lessonEdit/${idLessonInfo}`;
                 const { data } = await getData(urlLessonEdit);
                 commit('setDataLessonCreate', data);

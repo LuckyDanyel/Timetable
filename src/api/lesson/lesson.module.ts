@@ -5,6 +5,7 @@ import { LessonGetService } from "./services/lesson.get.service";
 import { LessonCreateService } from "./services/lesson.create.service";
 import { TypeLessonService } from "../typeLesson/typeLesson.service";
 import { PeriodsService } from "../periods/periods.service";
+import { LessonDeleteService } from './services/lesson.delete.service';
 
 
 import { Lesson } from "./lesson.entity";
@@ -18,6 +19,6 @@ import { TypeLesson } from "../typeLesson/typeLesson.entity";
 @Module({
     imports: [TypeOrmModule.forFeature([Lesson, Subject, Teacher, Periods, Audience, LessonInfo, TypeLesson])],
     controllers: [LessonController],
-    providers: [LessonCreateService, LessonGetService, TypeLessonService, PeriodsService],
+    providers: [LessonCreateService, LessonGetService, TypeLessonService, PeriodsService, LessonDeleteService],
 })
 export class LessonModule{}
