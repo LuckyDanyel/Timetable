@@ -6,7 +6,8 @@ export default function(dataLesson) {
         idLessonInfo,
         idLesson,
         dayIndex,
-        date, 
+        date,
+        isReplacment,
     } = dataLesson;
     const {
         currentAudience, 
@@ -27,6 +28,7 @@ export default function(dataLesson) {
         idLesson,
         dayIndex,
         period,
+        isReplacment,
         dataTypeLesson,
         audience,
         subject,

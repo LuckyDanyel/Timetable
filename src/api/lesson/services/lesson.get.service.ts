@@ -15,47 +15,50 @@ export class LessonGetService {
     ){}
     
     async getLessons(idLessonInfo: string): Promise<any> {
+        try {
+            const lessonInfo = await 
+            getManager().getRepository(LessonInfo)
+            .createQueryBuilder('lessonInfo')
+            .leftJoinAndMapOne("lessonInfo.group", "lessonInfo.group", "lesson_info")
+            .leftJoinAndMapOne("lessonInfo.studyPlan", "lessonInfo.studyPlan", "study_plan")
+            .leftJoinAndMapOne("study_plan.direction", "study_plan.direction", "direction")
+            .leftJoinAndMapOne("direction.institute", "direction.institute", "institute")
+            .where("lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
+            .getOne()
 
-        const massiveLessonGroup = await 
-        this.lessonRepository.createQueryBuilder('lesson')
-        .leftJoinAndMapOne("lesson.teacher", "lesson.teacher", "teacher")
-        .leftJoinAndMapOne("lesson.subject", "lesson.subject", "subject")
-        .leftJoinAndMapOne("lesson.typeLesson", "lesson.typeLesson", "typeLesson")
-        .leftJoinAndMapOne("lesson.audience", "lesson.audience", "audience")
-        .leftJoinAndMapOne("audience.building", "audience.building", "building")
-        .leftJoinAndMapOne("lesson.periods", "lesson.periods", "periods")
-        .where("lesson.lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
-        .andWhere("lesson.date is not null")
-        .getMany()
+            if(!lessonInfo) throw 'Нет такой информации о расписанни';
 
-        const massiveLessonGroupDouble = await 
-        this.lessonRepository.createQueryBuilder('lesson')
-        .leftJoinAndMapOne("lesson.teacher", "lesson.teacher", "teacher")
-        .leftJoinAndMapOne("lesson.subject", "lesson.subject", "subject")
-        .leftJoinAndMapOne("lesson.typeLesson", "lesson.typeLesson", "typeLesson")
-        .leftJoinAndMapOne("lesson.audience", "lesson.audience", "audience")
-        .leftJoinAndMapOne("audience.building", "audience.building", "building")
-        .leftJoinAndMapOne("lesson.periods", "lesson.periods", "periods")
-        .where("lesson.lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
-        .andWhere("lesson.date is null")
-        .getMany()
-        
-        const lessonInfo = await 
-        getManager().getRepository(LessonInfo)
-        .createQueryBuilder('lessonInfo')
-        .leftJoinAndMapOne("lessonInfo.group", "lessonInfo.group", "lesson_info")
-        .leftJoinAndMapOne("lessonInfo.studyPlan", "lessonInfo.studyPlan", "study_plan")
-        .leftJoinAndMapOne("study_plan.direction", "study_plan.direction", "direction")
-        .leftJoinAndMapOne("direction.institute", "direction.institute", "institute")
-        .where("lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
-        .getOne()
+            const massiveLessonGroup = await 
+            this.lessonRepository.createQueryBuilder('lesson')
+            .leftJoinAndMapOne("lesson.teacher", "lesson.teacher", "teacher")
+            .leftJoinAndMapOne("lesson.subject", "lesson.subject", "subject")
+            .leftJoinAndMapOne("lesson.typeLesson", "lesson.typeLesson", "typeLesson")
+            .leftJoinAndMapOne("lesson.audience", "lesson.audience", "audience")
+            .leftJoinAndMapOne("audience.building", "audience.building", "building")
+            .leftJoinAndMapOne("lesson.periods", "lesson.periods", "periods")
+            .where("lesson.lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
+            .andWhere("lesson.date is not null")
+            .getMany()
 
-        if(!lessonInfo) throw 'Нет такой информации о расписанни';
+            const massiveLessonGroupDouble = await 
+            this.lessonRepository.createQueryBuilder('lesson')
+            .leftJoinAndMapOne("lesson.teacher", "lesson.teacher", "teacher")
+            .leftJoinAndMapOne("lesson.subject", "lesson.subject", "subject")
+            .leftJoinAndMapOne("lesson.typeLesson", "lesson.typeLesson", "typeLesson")
+            .leftJoinAndMapOne("lesson.audience", "lesson.audience", "audience")
+            .leftJoinAndMapOne("audience.building", "audience.building", "building")
+            .leftJoinAndMapOne("lesson.periods", "lesson.periods", "periods")
+            .where("lesson.lessonInfo.id = :idLessonInfo", { idLessonInfo: idLessonInfo })
+            .andWhere("lesson.date is null")
+            .getMany()
 
-        return {
-            lessonInfo,
-            massiveLessonGroup,
-            massiveLessonGroupDouble,
+            return {
+                lessonInfo,
+                massiveLessonGroup,
+                massiveLessonGroupDouble,
+            }   
+        } catch (error) {
+            return error;
         }
     }
 
@@ -66,7 +69,6 @@ export class LessonGetService {
 
     async getLessonsByIndexDayAndPeriod(dataParams: any): Promise<Lesson[]> {
         const { indexDay, parity, periodId, lessonInfoId } = dataParams;
-        console.log(indexDay, periodId);
 
         const result = 
         await this.lessonRepository.createQueryBuilder('lesson')

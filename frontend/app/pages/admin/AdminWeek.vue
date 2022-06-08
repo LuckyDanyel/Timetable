@@ -17,7 +17,6 @@ export default {
         const massiveComplitedLesson = {};
         const massiveIdDeleteLesson = [];
         const { parity, endWeek, startWeek } = store.state.commonStore.currentWeek;
-        console.log(startWeek);
         const role = store.state.commonStore.USER_ROLE;
         const idLessonInfo = store.state.commonStore.idLessonInfo;
         const typeAddLesson = store.state.adminStore.typeAddLesson;
@@ -29,10 +28,16 @@ export default {
         const addLesson = (dataLesson) => {
             const unigueIndex = dataLesson.dayIndex + dataLesson.period.id;
             massiveComplitedLesson[unigueIndex] = dataLesson;
-            console.log(massiveComplitedLesson);
+            console.log({...massiveComplitedLesson});
         }
-        const deleteLesson = (idLesson) => {
-            massiveIdDeleteLesson.push(idLesson);
+        const deleteLesson = (dataLesson) => {
+            const { dayIndex, periodId, idLesson } = dataLesson;
+            const unigueIndex = String(dayIndex) + String(periodId);
+            delete massiveComplitedLesson[unigueIndex];
+            if(idLesson) {
+                massiveIdDeleteLesson.push(idLesson);
+            }
+            console.log({...massiveComplitedLesson});
         }
         const saveLessons = async () => {
             const urlCreate = 'lesson/create';
@@ -74,7 +79,8 @@ export default {
                     :typeAddLesson="typeAddLesson"
                     @addLessonToSend="addLesson"
                     @deleteLessonEdit="deleteLesson"
-                ></lesson-edit>
+                >
+                </lesson-edit>
             </div>
             <div class="admin-week__save-result" @click="saveLessons">Сохранить расписание</div> 
         </div>

@@ -25,6 +25,9 @@ export class Lesson {
     @Column()
     parity: number;
 
+    @Column({ type: 'boolean', default: false })
+    isReplacment: Boolean;
+
     @ManyToOne(() => Subject, (subject) => subject.lessons)
     subject: Subject;
 

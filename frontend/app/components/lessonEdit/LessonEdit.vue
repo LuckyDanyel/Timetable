@@ -21,7 +21,7 @@ export default {
         },
         typeAddLesson: {
             required: true,
-        }
+        },
     },
 
     setup(props, contenxt) {
@@ -35,23 +35,34 @@ export default {
 </script>
 <template lang="">
     <div class="lesson-edit">
-        <div class="lesson-edit__content">
+        <div class="lesson-edit__content" v-if="role === 'ADMIN'">
             <div class="lesson-edit__hiden" v-if="!isEmpty">
+
                 <h2 class="lesson-edit__subject"> {{ resultLesson.currentSubject.name }} </h2>
-                <h2 class="lesson-edit__heading"> {{ resultLesson.currentTeacher.nameInitials }} </h2>
+                <div class="lesson-edit__change">
+                    <h2 class="lesson-edit__heading"> {{ resultLesson.currentTeacher.nameInitials }} </h2>
+                    <div class="lesson-edit__change-img" v-show="isReplacment"></div>
+                </div>
                 <h2 class="lesson-edit__heading"> {{ resultLesson.currentAudience.name }} </h2>
                 <h2 class="lesson-edit__heading"> {{ resultLesson.currentTypeLesson.name }} </h2>
 
-                <div class="lesson-edit__button-edit" v-if="role === 'ADMIN'">
-                    <p @click="addLesson">Редактировать</p>
+                <div class="lesson-edit__container" v-if="isEdit">
+                    <div class="lesson-edit__button-edit">
+                        <p @click="addLesson">Редактировать</p>
+                    </div>
+                    <div class="lesson-edit__button-edit">
+                        <p @click="deleteAll">Удалить</p>
+                    </div>
                 </div>
-                <div class="lesson-edit__button-edit" v-if="role === 'ADMIN'">
-                    <p @click="deleteAll">Удалить</p>
+                <div class="lesson-edit__add-change lesson-edit__create" v-if="!isEmpty && typeAddLesson === 'SINGLE' && !isEdit">
+                    <p @click="takeReplacmentLesson"> Поставить замену </p>
                 </div>
             </div>
-            <div class="lesson-edit__create" v-if="isEmpty && role === 'ADMIN' ">
+            
+            <div class="lesson-edit__create" v-if="isEmpty">
                 <p @click="addLesson">Добавить расписание</p>
             </div>
+
         </div>
         <dialog-modal :show="showModal" @close-modal="closeModal">
             <select-data 
@@ -104,10 +115,17 @@ export default {
         margin: 8px 0;
         max-width: 160px;
         width: 100%;
-        height: 180px;
+        height: 195px;
         padding: 12px;
         background-color: #47A7EB;
         border-radius: 5px;
+    }
+    .lesson-edit__container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
     }
     .lesson-edit__content {
         height: 100%;
@@ -124,8 +142,31 @@ export default {
         color: white;
         font-style: normal;
         font-weight: 400;
-        margin: 0;
+        margin: 0 auto;
         margin-bottom: 5px;
+        max-width: 100px;
+        width: 100%;
+        text-align: center;
+    }
+    .lesson-edit__change {
+        width: 100%;
+        position: relative;
+        text-align: center;
+    }
+
+    .lesson-edit__change-img {
+        width: 19px;
+        height: 16px;
+        background-image: url('./img/change-teacher.svg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: 0;
+        right: 0;
+            &:hover {
+                cursor: pointer;
+            }
     }
     .lesson-edit__subject {
         word-break: break-all;
@@ -137,11 +178,13 @@ export default {
         
     }
     .lesson-edit__button-edit {
-        height: 100%;
         display: flex;
         align-items: flex-end;
         justify-content: center;
-        width: 100%;
+
+            &:first-child {
+                margin-bottom: 7px;
+            }
 
             p {
                 display: inline-flex;
@@ -202,6 +245,13 @@ export default {
         &:hover {
             cursor: pointer;
             opacity: 0.75;
+        }
+    }
+    .lesson-edit__add-change {
+        
+        p {
+            height: 70%;
+            justify-content: center;
         }
     }
     

@@ -1,4 +1,5 @@
 const { DateTime } = require("luxon");
+const _ = require('lodash');
 import { Lesson } from '../lesson.entity';
 
 const massiveDays = ["ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"]
@@ -48,13 +49,14 @@ export function lessonConverterSemestr(dataLessons: any): any {
 function countMonthes(firstValue: Date, seondValue: Date): number {
     let firstDate = DateTime.fromJSDate(firstValue);
     let secondDate = DateTime.fromJSDate(seondValue);
-    const countMonth = Math.ceil(secondDate.diff(firstDate, ['month']).toObject().months);
+    const countMonth = Math.ceil(secondDate.diff(firstDate, ['days']).toObject().days / 7);
     return countMonth;
 }
 
 function createConfigureWeeks(start_semester: Date, end_semester: Date) {
     const countMonth = countMonthes(start_semester, end_semester);
     const mouthNumber = start_semester.getMonth();
+    const endMonth = end_semester.getMonth()
     const year = start_semester.getFullYear();
     const day = start_semester.getDate();
 
@@ -63,17 +65,17 @@ function createConfigureWeeks(start_semester: Date, end_semester: Date) {
         mouthNumber,
         year,
         day,
+        endMonth,
     }
 }
 
 function createStructureWeeksLessons(dataConfigure: any): WeekLessons[] {
-    const { year, mouthNumber, countMonth, day } = dataConfigure;
+    const { year, mouthNumber, countMonth, day} = dataConfigure;
     const startDate = new Date(year, mouthNumber, day);
     const newDateStart = findDayMonday(startDate);
-
     let countDateWeek = 0;
     const result: WeekLessons[] = [];
-    for(let i = 0; i < countMonth * 4; i++) {
+    for(let i = 0; i <= countMonth; i++) {
         const week = new WeekLessons();
         const dateMonth = new Date(newDateStart);
 
@@ -118,27 +120,49 @@ function groupWeeksOnMonth(dataWeeks: WeekLessons[], periods: any): any {
     return groupData;
 }
 function addLessonsToWeeks(DataWeeksOnMonth: WeekLessons[], lessonData: Lesson[], configureDate: any) {
-    const { year, mouthNumber, countMonth } = configureDate;
+    const { year, mouthNumber: startMonth, countMonth, endMonth } = configureDate;
     for(let lesson of lessonData) {
         const date = new Date(lesson.date);
         const dayIndex = lesson.dayIndex;
         const numberPeriods = lesson.periods;
         const dayIndexDateLesson = date.getDay();
-        const monthDateLesson = date.getMonth();
-        const monthForLessonInData = DataWeeksOnMonth[monthDateLesson];
-        
+        let findWeek = false;
+        let monthDateLesson = date.getMonth();
+        if(!DataWeeksOnMonth[monthDateLesson] && monthDateLesson < startMonth) {
+            monthDateLesson = monthDateLesson + 1;
+        }
+        let monthForLessonInData = DataWeeksOnMonth[monthDateLesson];
         for(let weekLesson in monthForLessonInData) {
             const startDayWeek = monthForLessonInData[weekLesson].startWeek;
             const endDayWeek = monthForLessonInData[weekLesson].endWeek;
             const currentWeek = monthForLessonInData[weekLesson];
-            
             if(date) {
                 const inRange = +startDayWeek <= +date && +date <= +endDayWeek;
                 if(inRange) {
-                    currentWeek.massiveLessonsOnWeek[dayIndex][numberPeriods].dataLesson = lesson;
+                    findWeek = true;
+                    currentWeek.massiveLessonsOnWeek[dayIndex][numberPeriods.name].dataLesson = lesson;
+                    currentWeek.massiveLessonsOnWeek[dayIndex][numberPeriods.name].isEdit = true;
                 }
             }
-        } 
+        }
+        if(!findWeek) {
+            monthDateLesson = monthDateLesson + 1;
+            monthForLessonInData = DataWeeksOnMonth[monthDateLesson];
+            for(let weekLesson in monthForLessonInData) {
+                const startDayWeek = monthForLessonInData[weekLesson].startWeek;
+                const endDayWeek = monthForLessonInData[weekLesson].endWeek;
+                const currentWeek = monthForLessonInData[weekLesson];
+                if(date) {
+                    // console.log(date.toLocaleDateString())
+                    const inRange = +startDayWeek <= +date && +date <= +endDayWeek;
+                    if(inRange) {
+                        findWeek = true;
+                        currentWeek.massiveLessonsOnWeek[dayIndex][numberPeriods.name].dataLesson = lesson;
+                        currentWeek.massiveLessonsOnWeek[dayIndex][numberPeriods.name].isEdit = true;
+                    }
+                }
+            }
+        }
     }
     return DataWeeksOnMonth;
 }
@@ -148,8 +172,22 @@ function addDoubleLesson(groupLessonMonth: any, dobuleWeeksStructure: any) {
         const month = groupLessonMonth[monthIndex];
         for(let weekIndex in month) {
             const parity = month[weekIndex].parity;
+            const dateStartWeek = new Date(month[weekIndex].startWeek);
             let doubleWeek = dobuleWeeksStructure[parity];
-            month[weekIndex].massiveLessonsOnWeek = doubleWeek.massiveLessonsOnWeek;
+            month[weekIndex].massiveLessonsOnWeek = _.cloneDeep(doubleWeek.massiveLessonsOnWeek);
+            const massiveLessonsOnWeek = month[weekIndex].massiveLessonsOnWeek;
+            for(let dayIndex in massiveLessonsOnWeek) {
+                const day = massiveLessonsOnWeek[dayIndex];
+                const dateToDay = new Date(dateStartWeek);
+                for(let numberPeriod in day) {
+                    const { dataLesson } = day[numberPeriod];
+                    day[numberPeriod].date = dateToDay;
+                    if(dataLesson?.id && !dataLesson?.date) {
+                        day[numberPeriod].isEdit = false;
+                    }
+                }
+                dateToDay.setDate(dateToDay.getDate() + Number(dayIndex) - 1);
+            }
         }
     }
     return groupLessonMonth;
@@ -177,8 +215,9 @@ function createStructureDoubleLesson(massiveDoubleLesson: Lesson[], periods: any
             week.massiveLessonsOnWeek[dayIndex] = {};
             for(let period of periods) {
                 const numberPeriods = week.massiveLessonsOnWeek[i];
-                let copyPeriod = {...period};
+                let copyPeriod = { ...period };
                 copyPeriod.dataLesson = {};
+                copyPeriod.isEdit = true;
                 numberPeriods[copyPeriod.name] = copyPeriod;
             }
         }

@@ -48,6 +48,7 @@ export default {
         display: flex;
         overflow: auto;
         padding-top: 20px;
+        z-index: 1;
     }
     .dialog__close {
         width: 100%;

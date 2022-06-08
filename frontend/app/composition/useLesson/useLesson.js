@@ -18,12 +18,13 @@ export default function(props, context) {
     const currentGroup = store.state.commonStore.group;
     const currentDirection = store.state.commonStore.direction;
 
+    let isChangeLesson = false;
     let idLesson = dataLesson.id || null;
-    let date = createDate({
-        date: dataLesson.date,
-        dateStartWeek: startWeek,
-        dayIndex,
-    });
+    let date = dataLesson.date || lessonInfo.date || null;
+
+    const isEdit = ref(lessonInfo.isEdit);
+    const isReplacment = ref(dataLesson.isReplacment || false);
+    
     const resultLesson = ref({});
     
     const dataTypeLessonLocal = ref({});
@@ -51,9 +52,11 @@ export default function(props, context) {
 
     const deleteAll = () => {
 
-        if(idLesson) {
-            context.emit('deleteLessonEdit', idLesson)
-        }
+        context.emit('deleteLessonEdit', {
+            idLesson,
+            dayIndex,
+            periodId: lessonInfo.id,
+        })
         idLesson = null;
 
         resultLesson.value.currentSubject = {};
@@ -71,7 +74,7 @@ export default function(props, context) {
         dataBuildingsLocal.value = {};
         dataAudinceLocal.value = {};
         dataSubjectsLocal.value = {};
-        dataTeacherLocal.value = {};
+        dataTeacherLocal.value = [];
 
         isEmpty.value = true;
     }
@@ -97,14 +100,16 @@ export default function(props, context) {
         saveRsult();
     }
     const addLesson = async () => {
+
+        const url = `lesson/params/${dayIndex}/${parity}/${lessonInfo.id}/${idLessonInfo}`;
+        const { data } = await getData(url);
+        dataBusy.value = data;
+
         const { dataTypeLesson, dataAudince, dataBuildings, dataSubjects } = store.state.adminStore.dataCreateLesson;
         dataTypeLessonLocal.value = dataTypeLesson;
         dataBuildingsLocal.value = convertBuildings(dataBuildings);
         dataAudinceLocal.value = dataAudince;
         dataSubjectsLocal.value = dataSubjects;
-        const url = `lesson/params/${dayIndex}/${parity}/${lessonInfo.id}/${idLessonInfo}`;
-        const { data } = await getData(url);
-        dataBusy.value = data;
 
         openModal();
 
@@ -138,8 +143,26 @@ export default function(props, context) {
         })
     }
 
+    const isLessonWasChanging = () => {
+        if (
+            resultLesson.value.currentSubject?.id === currentSubject.value.id && 
+            resultLesson.value.currentTeacher?.id === currentTeacher.value.id &&
+            resultLesson.value.currentAudience?.id === currentAudience.value.id &&
+            resultLesson.value.currentTypeLesson?.id === currentTypeLesson.value.id
+        ) {
+            wrongValidate.value = true;
+            return false;
+        }
+        wrongValidate.value = false;
+        return true;
+    }
+
     const validateData = () => {
         const getResultLesson = getDataResultLesson();
+        if(!isLessonWasChanging()) {
+            wrongValidate.value = true;
+            return;
+        }
         for(let data in getResultLesson) {
             const someDataLessonIsEmpty = Object.keys(getResultLesson[data]).length === 0;
             if(someDataLessonIsEmpty) {
@@ -153,6 +176,12 @@ export default function(props, context) {
 
     const saveLesson = () => {
         if(validateData()) {
+            if(isChangeLesson) {
+                idLesson = null;
+                isReplacment.value = true;
+                isEdit.value = true;
+            } 
+
             isEmpty.value = false;
 
             let dataStructureSendLesson = {};
@@ -162,6 +191,7 @@ export default function(props, context) {
             dataStructureSendLesson.idLessonInfo = idLessonInfo;
             dataStructureSendLesson.parity = parity;
             dataStructureSendLesson.date = date;
+            dataStructureSendLesson.isReplacment = isReplacment.value;
             dataStructureSendLesson.dayIndex = dayIndex;
 
             const dataLessonStructure = convertLesson(dataStructureSendLesson);
@@ -174,9 +204,12 @@ export default function(props, context) {
 
             closeModal();
             saveRsult();
-        } else {
-            
         }
+    }
+
+    const takeReplacmentLesson = () => {
+        isChangeLesson = true;
+        addLesson();
     }
 
     const filterAudienceByBuilding = computed(() => {
@@ -212,7 +245,6 @@ export default function(props, context) {
 
     const filterTeachersByBusy = computed(() => {
         const { groupTeachers } = dataBusy.value;
-        console.log(dataTeacherLocal.value);
         const result = [];
         for(let teacher of dataTeacherLocal.value) {
             if(groupTeachers[teacher.id]) {
@@ -246,6 +278,9 @@ export default function(props, context) {
         parity,
         idLessonInfo,
         date,
+        isEdit,
+        isReplacment,
+        typeAddLesson,
 
         currentSubject,
         currentTeacher,
@@ -267,6 +302,7 @@ export default function(props, context) {
         addLesson,
         saveRsult,
         deleteAll,
+        takeReplacmentLesson,
 
         filterAudienceByBusyAudience,
         filterTeachersByBusy,

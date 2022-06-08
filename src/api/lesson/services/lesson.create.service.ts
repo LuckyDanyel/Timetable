@@ -46,6 +46,7 @@ export class LessonCreateService {
             teacher,
             dayIndex,
             parity,
+            isReplacment,
         } = dataLesson;
 
         if(idLessonInfo && dataTypeLesson && audience && subject && teacher && period) {
@@ -62,6 +63,7 @@ export class LessonCreateService {
             lesson.teacher = teacher;
             lesson.dayIndex = dayIndex;
             lesson.parity = parity;
+            lesson.isReplacment = isReplacment;
 
             return lesson;
         }
