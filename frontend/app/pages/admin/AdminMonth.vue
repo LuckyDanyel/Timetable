@@ -7,9 +7,11 @@ import convertersLessonMonth from './converters/convertersLessonMonth';
 import dateFormat from '@/adapters/dateFormat';
 import LessonMoth from '@/components/lessonMonth/LessonMonth.vue';
 import useModal from '@/composition/useModal/useModal';
+import Header from '@/components/header/Header.vue';
 export default {
     components: {
         LessonMoth,
+        Header,
     },
 
     setup() {
@@ -69,6 +71,7 @@ export default {
 }
 </script>
 <template lang="">
+    <Header></Header>
     <div class="admin-month">
         <div class="admin-month__wrapper">
             <div class="admin-month__container">
@@ -107,6 +110,8 @@ export default {
     .admin-month__wrapper {
         max-width: 960px;
         width: 100%;
+        margin-top: 20px;
+        margin-bottom: 20px;
     }
     .admin-month__container {
         max-width: 360px;

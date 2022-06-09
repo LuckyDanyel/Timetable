@@ -4,12 +4,14 @@ import useModal from "@/composition/useModal/useModal";
 import UploadDataUniversity from '@/components/uploadDataUniversity/UploadDataUniversity.vue'
 import StudyPlan from "@/components/studyPlan/StudyPlan.vue";
 import LessonInfo from "@/components/lessonInfo/LessonInfo.vue";
+import Header from '@/components/header/Header.vue';
 
 export default {
     components: {
     UploadDataUniversity,
     StudyPlan,
-    LessonInfo
+    LessonInfo,
+    Header
 },
 
     setup() {
@@ -30,6 +32,7 @@ export default {
 </script>
 
 <template>
+    <Header></Header>
     <div class="main-admin">
         <div class="main-admin__wrapper">
             <dialog-modal :show="modalUpload.showModal" @close-modal="modalUpload.closeModal">
@@ -63,7 +66,12 @@ export default {
 .main-admin__wrapper {
     max-width: 820px;
     width: 100%;
-    margin: 0 auto;    
+    margin: 0 auto;
+    height: calc(100vh - 70px);    
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
 }
 .main-admin__button-upload {
     font-family: RobotoSemiBold;
@@ -75,6 +83,8 @@ export default {
     background-color: #1283D3;
     color: white;
     cursor: pointer;
+    margin-bottom: 10px;
+    border-radius: 10px;
     
 }
     

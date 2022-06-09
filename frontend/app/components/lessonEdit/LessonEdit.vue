@@ -112,7 +112,6 @@ export default {
 </template>
 <style lang="scss">
     .lesson-edit {
-        margin: 8px 0;
         max-width: 160px;
         width: 100%;
         height: 195px;

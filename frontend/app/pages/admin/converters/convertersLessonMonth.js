@@ -2,11 +2,9 @@ export default function(dataLesson) {
 
     const { monthWeeksLessons, studyPlan } = dataLesson;
     const { end_semester, start_semester } = studyPlan;
-    console.log(Object.keys(monthWeeksLessons).length);
     const monthStart = new Date(start_semester);
     const countMonth = Object.keys(monthWeeksLessons).length;
     const result = [];
-    console.log(countMonth);
     for(let i = 0; i < countMonth; i++) {
         const indexMonth = monthStart.getMonth();
         const data = {

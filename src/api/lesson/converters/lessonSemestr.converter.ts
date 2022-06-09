@@ -153,7 +153,6 @@ function addLessonsToWeeks(DataWeeksOnMonth: WeekLessons[], lessonData: Lesson[]
                 const endDayWeek = monthForLessonInData[weekLesson].endWeek;
                 const currentWeek = monthForLessonInData[weekLesson];
                 if(date) {
-                    // console.log(date.toLocaleDateString())
                     const inRange = +startDayWeek <= +date && +date <= +endDayWeek;
                     if(inRange) {
                         findWeek = true;
