@@ -17,7 +17,7 @@ export default {
                 store.dispatch('getDataLessonCreate', idLessonInfo),
                 store.dispatch('getDataLesson', idLessonInfo),
             ])
-            router.push({ path: `/admin/month/`})
+            router.push({ path: '/admin/month/'})
         } 
 
         return {
