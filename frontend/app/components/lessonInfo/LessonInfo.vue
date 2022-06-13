@@ -33,8 +33,8 @@ export default {
         <h2 class="lesson-info__heading">Созданное расписание</h2>
         <div class="lesson-info__row">
             <div class="lesson-info__item lesson-info__up lesson-info__first">Название группы</div>
-            <div class="lesson-info__item lesson-info__up lesson-info__third">Дата начала семместра</div>
-            <div class="lesson-info__item lesson-info__up lesson-info__four">Дата окончания семместра</div>
+            <div class="lesson-info__item lesson-info__up lesson-info__third">Дата начала семестра</div>
+            <div class="lesson-info__item lesson-info__up lesson-info__four">Дата окончания семестра</div>
             <div class="lesson-info__item lesson-info__up lesson-info__five">Курс</div>
         </div>
         <div class="lesson-info__row" v-for="lessonInfo in massiveLessonInfo">

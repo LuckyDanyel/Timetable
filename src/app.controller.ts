@@ -7,7 +7,7 @@ export class AppController {
 
   @Get()
   @Render('index')
-  root() {
+  render() {
     return { message: 'Hello world!' };
   }
 }

@@ -16,7 +16,7 @@ const plugins = () =>  {
         new CleanWebpackPlugin(),
         new HTMLWebpackPlugin({
             template:  path.join(__dirname, 'app/pages/index.html'),
-            filename: `html/index.html`,
+            filename: (isProd) ? `html/index.hbs` : `html/index.html`,
             minify: {
                 collapseWhitespace: isProd
             }

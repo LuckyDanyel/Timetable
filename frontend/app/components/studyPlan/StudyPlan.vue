@@ -95,11 +95,11 @@ export default {
         </select-data>
         <div class="study-plan__date">
             <div class="study-plan__date-conatiner">
-                <h2 class="study-plan__date-heading">Дата начала семместра</h2>
+                <h2 class="study-plan__date-heading">Дата начала семестра</h2>
                 <input class="study-plan__date-item" type="date" @change="changeDateStart">
             </div>
             <div class="study-plan__date-conatiner">
-                <h2 class="study-plan__date-heading">Дата конца семместра</h2>
+                <h2 class="study-plan__date-heading">Дата конца семестра</h2>
                 <input class="study-plan__date-item" type="date" @change="changeDateEnd">
             </div>
         </div>
