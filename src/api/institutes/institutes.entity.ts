@@ -19,9 +19,10 @@ export class Institute {
     @Column()
     typeInstitute: string;
 
-    @OneToMany(()=> Direction, (directions)=> directions.institute)
+    @OneToMany(()=> Direction, (directions) => directions.institute)
     directions: Direction[];
 
-    @OneToMany(()=> Teacher, (teacher)=> teacher.institute)
+    @OneToMany(()=> Teacher, (teacher) => teacher.institute)
     teacher: Teacher[];
 }
+

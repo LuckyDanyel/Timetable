@@ -37,7 +37,7 @@ module.exports = {
     mode: 'development',
     entry: '../app/pages/main.js',
     target: process.env.NODE_ENV === "development" ? "web" : "browserslist",
-    watch: true,
+    watch: (isDev) ? true : false,
     output: {
         filename: `./js/${filename('js')}` ,
         path: (isProd) ? path.resolve(__dirname, '../views') : path.resolve(__dirname, 'dist'),
@@ -50,8 +50,6 @@ module.exports = {
         compress: true,
         hot: true,
         port: 8080,
-       
-
     },
     devtool: 'source-map',
     module: {
