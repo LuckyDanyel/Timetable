@@ -80,7 +80,7 @@ export default {
                 <div class="admin-month__date">Дата расписания: {{ dateFormat(studyPlan.start_semester) }} - {{ dateFormat(studyPlan.end_semester) }} 
                 </div>
             </div>
-            <div class="admin-month__heading">Расписание на семместр</div>
+            <div class="admin-month__heading">Расписание на семестр</div>
             
             <lesson-moth v-for="lessonsMonth in monthWeeksLessons" :data="lessonsMonth"></lesson-moth>
 
